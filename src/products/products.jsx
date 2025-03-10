@@ -4,6 +4,7 @@ import OnClickCartAdds from "./productmap";
 export default function productslist() {
     const [products, setProducts] = useState([]);
     const [filter, setFilter] = useState([]);
+    const [isCartOpen, setIsCartOpen] = useState(false);
     const [category_chk, setcategory_chk] = useState(() => {
         return localStorage.getItem("category_chk") || "All"; // Default to "All"
     });
@@ -124,7 +125,6 @@ export default function productslist() {
 
         return filteredProducts.map((product, index) => {
             // rename products to product
-
             return (
                 <div
                     key={index}
@@ -148,7 +148,6 @@ export default function productslist() {
                         <span
                             id={`product_title_cart_${index + 1}`}
                             onClick={(event) => returnOnClickCartAdds(event)}
-
                         >
                             Add to Cart
                         </span>
@@ -163,9 +162,20 @@ export default function productslist() {
 
     return (
         <div className="Main_Shop_Page flex gap-[5%] ">
+
             <nav>{renderCategories()}</nav>
-            <div className="productlistings gap-[5%] ">{renderProducts()}</div>
-            <OnClickCartAdds products={products} />
+
+            {/* Hide product listings when the cart is open */}
+            {!isCartOpen && (
+                <div className="productlistings gap-[5%] ">
+                    {renderProducts()}
+                </div>
+            )}
+            <OnClickCartAdds
+                products={products}
+                setIsCartOpen={setIsCartOpen}
+                IsCartOpen={isCartOpen}
+            />
         </div>
     );
 }

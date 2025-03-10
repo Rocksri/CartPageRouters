@@ -1,19 +1,16 @@
 import { useEffect, useState } from "react";
 
-export default function OnClickCartAdds({ products }) {
+export default function OnClickCartAdds({ products, setIsCartOpen, IsCartOpen }) {
     const [cart, setCart] = useState([]);
-    const [isCartOpen, setIsCartOpen] = useState(false);
 
     function handleClick(event) {
         const target = event.target;
         if (target.id && target.id.startsWith("product_title_cart_")) {
             const productId = parseInt(target.id.split("_").pop()); // Extract product ID
 
-
             const productToAdd = products.find(
                 (product) => product.id === productId
             );
-
 
             if (productToAdd) {
                 setCart((prevCart) => [...prevCart, productToAdd]);
@@ -53,7 +50,6 @@ export default function OnClickCartAdds({ products }) {
         }
     }, [cart]);
 
-
     useEffect(() => {
         document.addEventListener("click", OnClickCartOpen);
 
@@ -62,37 +58,37 @@ export default function OnClickCartAdds({ products }) {
         };
     }, [cart]);
 
+    console.log('cartp', cart)
 
     return (
-        isCartOpen && (
-            <div className="w-[20%]">
-                <div className="cart-container flex">
-                    {cart.map((product, index) => (
-                        <div
-                            key={index}
-                            className="productCard justify-items-center p-[5%] flex flex-col"
+        IsCartOpen && ( // Only render when cart is not empty
+            <div className="cart-container gap-[5%]">
+                {cart.map((product, index) => (
+                    <div
+                        key={index}
+                        className="productCard justify-items-center p-[5%] flex"
+                        style={{
+                            height: cart.length < 7 ? "60%" : "auto",
+                        }}
+                    >
+                        <img
+                            src={product.image}
+                            alt={product.title}
+                            style={{ height: "auto" }}
+                        />
+                        <p
+                            className={`font-medium text-2xl product_title_${
+                                index + 1
+                            }`}
                         >
-                            <img
-                                src={product.image}
-                                alt={product.title}
-                                style={{ height: "auto" }}
-                            />
-                            <p
-                                className={`font-medium text-2xl product_title_${
-                                    index + 1
-                                }`}
-                            >
-                                {product.title}
-                            </p>
-                            <p className="text-2xl font-bold">
-                                ${product.price}
-                            </p>
-                            <div className="flex font-semibold text-2xl">
-                                Buy Now
-                            </div>
+                            {product.title}
+                        </p>
+                        <p className="text-2xl font-bold">${product.price}</p>
+                        <div className="flex font-semibold text-2xl">
+                            Buy Now
                         </div>
-                    ))}
-                </div>
+                    </div>
+                ))}
             </div>
         )
     );
