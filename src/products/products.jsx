@@ -9,6 +9,13 @@ export default function productslist() {
         return localStorage.getItem("category_chk") || "All"; // Default to "All"
     });
 
+    const filteredProducts =
+        category_chk === "All"
+            ? products
+            : products.filter(
+                    (product) => product.category === category_chk
+                );
+
     useEffect(() => {
         fetch("https://fakestoreapi.com/products")
             .then((response) => response.json())
@@ -75,7 +82,7 @@ export default function productslist() {
         if (productCard) {
             // Get the product title from the corresponding ID
             const productTitleElement = productCard.querySelector(
-                "[id^='product_title_cart_']"
+                "[id^='product_title_cart']"
             );
 
             if (productTitleElement) {
@@ -118,11 +125,6 @@ export default function productslist() {
     }
 
     function renderProducts() {
-        const filteredProducts =
-            category_chk === "All"
-                ? products
-                : products.filter((product) => product.category === category_chk);
-
         return filteredProducts.map((product, index) => {
             // rename products to product
             return (
@@ -136,17 +138,20 @@ export default function productslist() {
                     <img
                         src={product.image}
                         alt={product.title}
-                        className="h-[60%]"
+                        className="h-[50%]"
                     />
                     <p
-                        dangerouslySetInnerHTML={{ __html: formatTitle(product.title) }}
+                        dangerouslySetInnerHTML={{
+                            __html: formatTitle(product.title),
+                        }}
                         className={`font-medium product_title_${index + 1}`}
                         id={`product_title_${index + 1}`}
                     />
                     <p className="text-xl font-bold">${product.price}</p>
                     <div className="flex font-semibold">
                         <span
-                            id={`product_title_cart_${index + 1}`}
+                            id={`product_title_cart`}
+                            data-id={product.id} // Store the actual product ID
                             onClick={(event) => returnOnClickCartAdds(event)}
                         >
                             Add to Cart
@@ -159,10 +164,8 @@ export default function productslist() {
         });
     };
 
-
     return (
         <div className="Main_Shop_Page flex gap-[5%] ">
-
             <nav>{renderCategories()}</nav>
 
             {/* Hide product listings when the cart is open */}
@@ -172,7 +175,7 @@ export default function productslist() {
                 </div>
             )}
             <OnClickCartAdds
-                products={products}
+                products={filteredProducts}
                 setIsCartOpen={setIsCartOpen}
                 IsCartOpen={isCartOpen}
             />
