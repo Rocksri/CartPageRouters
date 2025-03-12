@@ -12,9 +12,12 @@ export default function pageHeader() {
                     <li>
                         <a href="#">Menu</a>
                     </li>
-                    <li className="acricle MainCart">
+                    <li className="acricle MainCart justify-items-center">
                         <a href="#">Cart</a>
-                        <span id="product_add" className="flex"></span>
+                        <span
+                            id="product_add"
+                            className="flex font-semibold"
+                        ></span>
                     </li>
                     <li>
                         <a href="#">Search</a>

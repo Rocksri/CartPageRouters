@@ -54,7 +54,7 @@ export default function productslist() {
     function renderCategories() {
         return (
             <>
-                <ul className="text-2xl text-start">
+                <ul className="text-2xl text-start flex-col">
                     {filter.map((category, index) => (
                         <li key={index}>
                             <a
@@ -130,9 +130,9 @@ export default function productslist() {
             return (
                 <div
                     key={index}
-                    className="productCard justify-items-center p-[5%] flex"
+                    className="productCard justify-items-center justify-around flex flex-col"
                     style={{
-                        height: filteredProducts.length < 7 ? "60%" : "auto",
+                        height: "650px",
                     }}
                 >
                     <img
@@ -156,8 +156,7 @@ export default function productslist() {
                         >
                             Add to Cart
                         </span>
-
-                        <span>Buy Now</span>
+                        <span className="BuyNowContorl">Buy Now</span>
                     </div>
                 </div>
             );
@@ -170,7 +169,7 @@ export default function productslist() {
 
             {/* Hide product listings when the cart is open */}
             {!isCartOpen && (
-                <div className="productlistings gap-[5%] ">
+                <div className="productlistings gap-y-[1%] gap-x-[5%]">
                     {renderProducts()}
                 </div>
             )}
