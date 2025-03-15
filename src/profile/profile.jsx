@@ -3,7 +3,7 @@
 export default function pageHeader() {
     return (
         <header className="flex">
-            <h1>Logo</h1>
+            <h1 className="LogoPath"></h1>
             <nav>
                 <ul className="flex text-2xl">
                     <li>
@@ -19,12 +19,9 @@ export default function pageHeader() {
                             className="flex font-semibold"
                         ></span>
                     </li>
-                    <li>
-                        <a href="#">Search</a>
-                    </li>
                 </ul>
             </nav>
-            <h1>Profile</h1>
+            <h1 className="ProfileLogo"></h1>
         </header>
     );
 }

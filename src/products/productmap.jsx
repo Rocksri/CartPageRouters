@@ -21,7 +21,6 @@ export default function OnClickCartAdds({
         const target = event.target;
 
         if (target.id && target.id.startsWith("product_title_cart")) {
-            // const productId = parseInt(target.id.split("_").pop()); // Extract product ID
             const productId = parseInt(target.getAttribute("data-id"),10); // Get the real product ID
 
             const productToAdd = products.find(
@@ -160,7 +159,7 @@ export default function OnClickCartAdds({
 
     return IsCartOpen ? (
         cart.length > 0 ? ( // Check if cart is not empty
-            <div className="cart-container gap-y-[1%] gap-x-[5%]">
+            <div className="cart-container gap-[1%]">
                 {cart.map((product, index) => (
                     <div
                         key={index}
@@ -227,11 +226,15 @@ export default function OnClickCartAdds({
                     </div>
                 ))}
             </div>
-
         ) : (
             <div className="text-2xl font-semibold self-center">
                 Cart is Empty
-                <h2>Go Back To Shopping</h2>
+                <h2
+                    className="text-blue-600 cursor-pointer hover:underline"
+                    onClick={() => (window.location.href = "index.html")} // Change to correct file name
+                >
+                    Go Back To Shopping
+                </h2>
             </div>
         )
     ) : null;

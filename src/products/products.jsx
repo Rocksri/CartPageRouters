@@ -19,13 +19,24 @@ export default function productslist() {
                 );
 
     useEffect(() => {
-        fetch("https://fakestoreapi.com/products")
-            .then((response) => response.json())
-            .then((result) => {
-                setProducts(result);
+        // Check if products exist in localStorage
+        const storedProducts = localStorage.getItem("products");
 
-            })
-            .catch((error) => console.log(error));
+        if (storedProducts) {
+            setProducts(JSON.parse(storedProducts)); // Load from localStorage
+        } else {
+            // Fetch from API if no data in localStorage
+            fetch("https://fakestoreapi.com/products")
+                .then((response) => response.json())
+                .then((result) => {
+                    setProducts(result);
+                    localStorage.setItem("products", JSON.stringify(result)); // Save to localStorage
+                    console.log('storedloacl')
+                })
+                .catch((error) =>
+                    console.error("Error fetching products:", error)
+                );
+        }
     }, []);
 
 
@@ -176,7 +187,7 @@ export default function productslist() {
 
             {/* Hide product listings when the cart is open */}
             {!isCartOpen && (
-                <div className="productlistings gap-y-[1%] gap-x-[5%]">
+                <div className="productlistings gap-[1%]">
                     {renderProducts()}
                 </div>
             )}
@@ -185,7 +196,6 @@ export default function productslist() {
                 setIsCartOpen={setIsCartOpen}
                 IsCartOpen={isCartOpen}
             />
-            <BuyNowClick products={filteredProducts} />
         </div>
     );
 }

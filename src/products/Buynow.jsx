@@ -1,21 +1,38 @@
 import { useState, useEffect } from "react";
 
-export default function BuyNowClick({ products }) {
+export default function BuyNowClick() {
     const [buyNowProduct, setBuyNowProduct] = useState(null);
+    const [cart, setCart] = useState([]);
+
+    useEffect(() => {
+        // Load cart and products from localStorage on mount
+        const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+        setCart(storedCart);
+    }, []);
 
     function handleClickBuyNow(event) {
         const target = event.target;
-
         if (target.classList.contains("BuyNowContorl")) {
             const productId = parseInt(target.getAttribute("data-id"), 10);
-            const productToBuy = products.find(
-                (product) => Number(product.id) === Number(productId)
+
+            const storedProducts =
+                JSON.parse(localStorage.getItem("products")) || [];
+            const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+
+            const productToBuy = storedProducts.find(
+                (product) => Number(product.id) === productId
+            );
+            const productFromCart = storedCart.find(
+                (product) => product.id === productId
             );
 
-                console.log(productToBuy);
-
             if (productToBuy) {
-                setBuyNowProduct({ ...productToBuy, count: 1 });
+                setBuyNowProduct({
+                    ...productToBuy,
+                    count: productFromCart ? productFromCart.count : 1,
+                });
+            } else {
+                console.warn("Product not found in storedProducts:", productId);
             }
         }
     }
@@ -23,79 +40,144 @@ export default function BuyNowClick({ products }) {
     function updateQuantity(change) {
         setBuyNowProduct((prev) => {
             if (!prev) return null;
-            return { ...prev, count: Math.max(1, prev.count + change) };
+
+            const newCount = Math.max(1, prev.count + change);
+            const updatedProduct = { ...prev, count: newCount };
+
+            // Update cart state immediately
+            setCart((prevCart) => {
+                const updatedCart = prevCart.map((p) =>
+                    p.id === updatedProduct.id ? updatedProduct : p
+                );
+
+                if (!updatedCart.find((p) => p.id === updatedProduct.id)) {
+                    updatedCart.push(updatedProduct);
+                }
+
+                return updatedCart;
+            });
+
+            return updatedProduct;
         });
+    }
+
+    function handleCheckout() {
+        if (!buyNowProduct) return;
+
+        // Show alert
+        alert("Product Ordered!");
+
+        // Get current cart from localStorage
+        const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        // Remove the purchased product from the cart
+        const updatedCart = storedCart.filter(
+            (product) => product.id !== buyNowProduct.id
+        );
+
+        // Save updated cart back to localStorage
+        localStorage.setItem("cart", JSON.stringify(updatedCart));
+
+        // Get current orders from localStorage
+        const storedOrders = JSON.parse(localStorage.getItem("orders")) || [];
+
+        // Add the ordered product to the orders list
+        storedOrders.push(buyNowProduct);
+
+        // Save orders back to localStorage
+        localStorage.setItem("orders", JSON.stringify(storedOrders));
+
+        // Clear buyNowProduct state (close modal)
+        setBuyNowProduct(null);
     }
 
     function closeModal() {
         setBuyNowProduct(null);
     }
 
+    // Update localStorage whenever cart changes
+    useEffect(() => {
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }, [cart]);
 
     useEffect(() => {
         document.addEventListener("click", handleClickBuyNow);
-
         return () => {
             document.removeEventListener("click", handleClickBuyNow);
         };
-    }, [buyNowProduct]);
+    }, []);
 
     if (!buyNowProduct) return null;
 
     return (
-        <div
-            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
-            onClick={closeModal}
-        >
+        buyNowProduct && (
             <div
-                className="bg-white p-6 rounded-lg shadow-lg w-[400px]"
-                onClick={(e) => e.stopPropagation()}
+                className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+                onClick={closeModal}
             >
-                <button
-                    className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-                    onClick={closeModal}
+                <div
+                    className="bg-white p-6 rounded-lg shadow-lg w-[400px] h-[700px] flex flex-col justify-around"
+                    onClick={(e) => e.stopPropagation()}
                 >
-                    ✖
-                </button>
+                    <h2 className="text-2xl font-bold mb-4">Buy Now</h2>
 
-                <h2 className="text-2xl font-bold mb-4">Buy Now</h2>
+                    {buyNowProduct?.image && (
+                        <img
+                            src={buyNowProduct.image}
+                            alt={buyNowProduct.title || "Product Image"}
+                            className="w-full h-[40%] object-contain rounded-md"
+                        />
+                    )}
 
-                <img
-                    src={buyNowProduct.image}
-                    alt={buyNowProduct.title}
-                    className="w-full h-40 object-cover rounded-md mb-4"
-                />
+                    <h3 className="text-xl font-bold">
+                        {buyNowProduct?.title || "No Title"}
+                    </h3>
 
-                <h3 className="text-xl font-semibold">{buyNowProduct.title}</h3>
-                <p className="text-lg text-gray-700">
-                    ${buyNowProduct.price.toFixed(2)}
-                </p>
+                    <p className="text-xl font-medium text-gray-700">
+                        {buyNowProduct?.price !== undefined
+                            ? `$${buyNowProduct.price.toFixed(2)}`
+                            : "Price not available"}
+                    </p>
 
-                <div className="flex items-center justify-between my-4">
+                    <div className="flex items-center justify-around font-semibold text-2xl">
+                        <button
+                            className="px-3 py-1 bg-gray-300 rounded"
+                            onClick={() => updateQuantity(-1)}
+                        >
+                            -
+                        </button>
+                        <span>{buyNowProduct?.count || 1}</span>
+                        <button
+                            className="px-3 py-1 bg-gray-300 rounded"
+                            onClick={() => updateQuantity(1)}
+                        >
+                            +
+                        </button>
+                    </div>
+
+                    <p className="text-2xl font-semibold">
+                        Total: $
+                        {buyNowProduct?.price !== undefined
+                            ? (
+                                  buyNowProduct.count * buyNowProduct.price
+                              ).toFixed(2)
+                            : "0.00"}
+                    </p>
+
                     <button
-                        className="px-3 py-1 bg-gray-300 rounded"
-                        onClick={() => updateQuantity(-1)}
+                        className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700"
+                        onClick={handleCheckout}
                     >
-                        -
+                        Proceed to Checkout
                     </button>
-                    <span className="text-xl">{buyNowProduct.count}</span>
                     <button
-                        className="px-3 py-1 bg-gray-300 rounded"
-                        onClick={() => updateQuantity(1)}
+                        className="text-gray-500 hover:text-gray-700"
+                        onClick={closeModal}
                     >
-                        +
+                        ✖
                     </button>
                 </div>
-
-                <p className="text-lg font-semibold">
-                    Total: $
-                    {(buyNowProduct.count * buyNowProduct.price).toFixed(2)}
-                </p>
-
-                <button className="mt-4 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700">
-                    Proceed to Checkout
-                </button>
             </div>
-        </div>
+        )
     );
 }
