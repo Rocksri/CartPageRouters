@@ -17,12 +17,12 @@ export default function OnClickCartAdds({
         localStorage.setItem("cart", JSON.stringify(cart));
     }, [cart]);
 
-    function handleClick(event) {
+    function handleClickProductAdd(event) {
         const target = event.target;
 
         if (target.id && target.id.startsWith("product_title_cart")) {
             // const productId = parseInt(target.id.split("_").pop()); // Extract product ID
-            const productId = parseInt(target.getAttribute("data-id")); // Get the real product ID
+            const productId = parseInt(target.getAttribute("data-id"),10); // Get the real product ID
 
             const productToAdd = products.find(
                 (product) => product.id === productId
@@ -136,11 +136,11 @@ export default function OnClickCartAdds({
     }
 
     useEffect(() => {
-        document.addEventListener("click", handleClick);
+        document.addEventListener("click", handleClickProductAdd);
         document.addEventListener("click", OnClickCartOpen);
 
         return () => {
-            document.removeEventListener("click", handleClick);
+            document.removeEventListener("click", handleClickProductAdd);
             document.removeEventListener("click", OnClickCartOpen);
         };
     }, [products, cart]); // Add cart as dependency.
@@ -217,7 +217,12 @@ export default function OnClickCartAdds({
                             >
                                 Remove All
                             </span>
-                            <span className="BuyNowContorl">Buy Now</span>
+                            <span
+                                className="BuyNowContorl"
+                                data-id={product.id} // Store the actual product ID
+                            >
+                                Buy Now
+                            </span>
                         </div>
                     </div>
                 ))}
@@ -230,4 +235,5 @@ export default function OnClickCartAdds({
             </div>
         )
     ) : null;
+
 }

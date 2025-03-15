@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import OnClickCartAdds from "./productmap";
+import BuyNowClick from "./Buynow";
+
 
 export default function productslist() {
     const [products, setProducts] = useState([]);
@@ -156,7 +158,12 @@ export default function productslist() {
                         >
                             Add to Cart
                         </span>
-                        <span className="BuyNowContorl">Buy Now</span>
+                        <span
+                            className="BuyNowContorl"
+                            data-id={product.id} // Store the actual product ID
+                        >
+                            Buy Now
+                        </span>
                     </div>
                 </div>
             );
@@ -178,6 +185,7 @@ export default function productslist() {
                 setIsCartOpen={setIsCartOpen}
                 IsCartOpen={isCartOpen}
             />
+            <BuyNowClick products={filteredProducts} />
         </div>
     );
 }
