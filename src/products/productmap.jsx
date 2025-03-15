@@ -222,6 +222,7 @@ export default function OnClickCartAdds({
                     </div>
                 ))}
             </div>
+
         ) : (
             <div className="text-2xl font-semibold self-center">
                 Cart is Empty
