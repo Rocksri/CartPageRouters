@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+
 export default function OnClickCartAdds({
     products,
     setIsCartOpen,
@@ -47,7 +48,6 @@ export default function OnClickCartAdds({
                     }
                 });
             }
-
             document
                 .getElementById("product_add")
                 .classList.add("product_added");
@@ -56,11 +56,9 @@ export default function OnClickCartAdds({
 
     function OnClickCartOpen(event) {
         const target = event.target;
-
         if (target.closest(".MainCart")) {
             if (cart.length === 0) {
                 alert("Please Add Products To Cart");
-                
             } else {
                 console.log("Opening cart...");
                 setIsCartOpen((prev) => !prev);
@@ -139,27 +137,29 @@ export default function OnClickCartAdds({
 
     useEffect(() => {
         document.addEventListener("click", handleClick);
-
-        return () => {
-            document.removeEventListener("click", handleClick);
-        };
-    }, [products]);
-
-    useEffect(() => {
         document.addEventListener("click", OnClickCartOpen);
 
         return () => {
+            document.removeEventListener("click", handleClick);
             document.removeEventListener("click", OnClickCartOpen);
-            const productCount = document.querySelector(".product_added");
-            if (productCount) {
-                productCount.innerHTML = cart.length;
-            }
         };
-    }, [cart]);
+    }, [products, cart]); // Add cart as dependency.
 
-    console.log(cart);
-    return (
-        IsCartOpen && ( // Only render when cart is not empty
+    const productCount = document.querySelector(".product_added");
+    if (productCount) {
+        console.log("Cart updated:", cart);
+        if (cart.length <= 0) {
+            productCount.innerHTML = "";
+            document
+                .getElementById("product_add")
+                .classList.remove("product_added");
+        } else {
+            productCount.innerHTML = cart.length;
+        }
+    }
+
+    return IsCartOpen ? (
+        cart.length > 0 ? ( // Check if cart is not empty
             <div className="cart-container gap-y-[1%] gap-x-[5%]">
                 {cart.map((product, index) => (
                     <div
@@ -222,6 +222,11 @@ export default function OnClickCartAdds({
                     </div>
                 ))}
             </div>
+        ) : (
+            <div className="text-2xl font-semibold self-center">
+                Cart is Empty
+                <h2>Go Back To Shopping</h2>
+            </div>
         )
-    );
+    ) : null;
 }
