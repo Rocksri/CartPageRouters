@@ -1,0 +1,86 @@
+import { useEffect, useState } from "react";
+import OnClickCartAdds from "./productmap";
+
+export default function ProductList({ cartPage }) {
+    const [products, setProducts] = useState([]);
+    const [filter, setFilter] = useState([]);
+    const [isCartOpen, setIsCartOpen] = useState(false);
+    const [category_chk, setcategory_chk] = useState(() => {
+        return localStorage.getItem("category_chk") || "All";
+    });
+    const [cart, setCart] = useState(() => {
+        const savedCart = localStorage.getItem("cart");
+        return savedCart ? JSON.parse(savedCart) : [];
+    });
+    const [addedProducts, setAddedProducts] = useState([]); // Track added products
+
+    // ... (other functions like useEffect, returnOnClickProducts, renderCategories, etc.)
+
+    function handleAddToCart(productId) {
+        const productToAdd = products.find((product) => product.id === productId);
+
+        if (productToAdd) {
+            setCart((prevCart) => {
+                const existingProduct = prevCart.find((item) => item.id === productId);
+
+                if (existingProduct) {
+                    alert("Product Already In Cart");
+                    return prevCart.map((item) =>
+                        item.id === productId
+                            ? { ...item, count: item.count + 1 }
+                            : item
+                    );
+                } else {
+                    return [...prevCart, { ...productToAdd, count: 1 }];
+                }
+            });
+
+            // Mark the product as added
+            setAddedProducts((prev) => [...prev, productId]);
+        }
+    }
+
+    function renderProducts() {
+        return filteredProducts.map((product, index) => {
+            return (
+                <div
+                    key={index}
+                    className="productCard justify-items-center justify-around flex flex-col"
+                    style={{ height: "650px" }}
+                >
+                    <img
+                        src={product.image}
+                        alt={product.title}
+                        className="h-[50%]"
+                    />
+                    <p
+                        dangerouslySetInnerHTML={{
+                            __html: formatTitle(product.title),
+                        }}
+                        className={`font-medium product_title_${index + 1}`}
+                        id={`product_title_${index + 1}`}
+                    />
+                    <p className="text-xl font-bold">${product.price}</p>
+                    <div className="flex font-semibold">
+                        <span
+                            id={`product_title_cart_${product.id}`}
+                            data-id={product.id}
+                            onClick={() => handleAddToCart(product.id)}
+                            style={{
+                                pointerEvents: addedProducts.includes(product.id) ? "none" : "auto",
+                                opacity: addedProducts.includes(product.id) ? 0.5 : 1,
+                            }}
+                        >
+                            {addedProducts.includes(product.id) ? "Added" : "Add to Cart"}
+                        </span>
+                        <span className="BuyNowContorl" data-id={product.id}>
+                            Buy Now
+                        </span>
+                    </div>
+                </div>
+            );
+        });
+    }
+
+    // ... (rest of the component)
+}

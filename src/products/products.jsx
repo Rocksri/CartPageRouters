@@ -1,37 +1,37 @@
 import { useEffect, useState } from "react";
 import OnClickCartAdds from "./productmap";
-import BuyNowClick from "./Buynow";
 
-
-export default function productslist() {
+export default function ProductList({
+    cartPage,
+    cart,
+    setCart,
+    setIsCartOpen,
+    IsCartOpen,
+    isCartOpen, // Receive isCartOpen prop from parent
+}) {
     const [products, setProducts] = useState([]);
     const [filter, setFilter] = useState([]);
-    const [isCartOpen, setIsCartOpen] = useState(false);
     const [category_chk, setcategory_chk] = useState(() => {
-        return localStorage.getItem("category_chk") || "All"; // Default to "All"
+        return localStorage.getItem("category_chk") || "All";
     });
+    const [addedProducts, setAddedProducts] = useState([]);
 
     const filteredProducts =
         category_chk === "All"
             ? products
-            : products.filter(
-                    (product) => product.category === category_chk
-                );
+            : products.filter((product) => product.category === category_chk);
 
+    // Fetch products on component mount
     useEffect(() => {
-        // Check if products exist in localStorage
         const storedProducts = localStorage.getItem("products");
-
         if (storedProducts) {
-            setProducts(JSON.parse(storedProducts)); // Load from localStorage
+            setProducts(JSON.parse(storedProducts));
         } else {
-            // Fetch from API if no data in localStorage
             fetch("https://fakestoreapi.com/products")
                 .then((response) => response.json())
                 .then((result) => {
                     setProducts(result);
-                    localStorage.setItem("products", JSON.stringify(result)); // Save to localStorage
-                    console.log('storedloacl')
+                    localStorage.setItem("products", JSON.stringify(result));
                 })
                 .catch((error) =>
                     console.error("Error fetching products:", error)
@@ -39,114 +39,102 @@ export default function productslist() {
         }
     }, []);
 
-
+    // Update categories when products change
     useEffect(() => {
-        if (products && products.length > 0) {      // Check if products exist and are not empty
-            // Extract all categories
-            const allCategories = products.map(
-                (products) => products.category
-            );
-            setFilter(allCategories);
-            console.log("All categories:", allCategories);
-
-            // Extract unique categories (using Set)
-            const uniqueCategories = ["All",...new Set(allCategories)];
+        if (products && products.length > 0) {
+            const allCategories = products.map((product) => product.category);
+            const uniqueCategories = ["All", ...new Set(allCategories)];
             setFilter(uniqueCategories);
-
-            console.log("Unique categories:", uniqueCategories);
         }
     }, [products]);
 
+    // Save cart to localStorage whenever it changes
+    useEffect(() => {
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }, [cart]);
+
+    // Handle category filter change
     function returnOnClickProducts(event, category) {
-        event.preventDefault(); // Prevent page reload
-        const onClickProducts = document.getElementsByClassName(category);
-        console.log("Products with category:", category, onClickProducts);
+        event.preventDefault();
         setcategory_chk(category);
     }
 
+    // Render category filters
     function renderCategories() {
         return (
-            <>
-                <ul className="text-2xl text-start flex-col">
-                    {filter.map((category, index) => (
-                        <li key={index}>
-                            <a
-                                href={`/category/${category}`}
-                                onClick={(event) =>
-                                    returnOnClickProducts(event, category)
-                                }
-                                className={category}
-                            >
-                                {category}
-                            </a>
-                        </li>
-                    ))}
-                </ul>
-            </>
+            <ul className="text-2xl text-start flex-col">
+                {filter.map((category, index) => (
+                    <li key={index}>
+                        <a
+                            href={`/productpage?category=${category}`}
+                            onClick={(event) =>
+                                returnOnClickProducts(event, category)
+                            }
+                            className={category}
+                        >
+                            {category}
+                        </a>
+                    </li>
+                ))}
+            </ul>
         );
-    };
+    }
 
-    function returnOnClickCartAdds(event) {
-        event.preventDefault();
+    // Add product to cart
+    function handleAddToCart(productId) {
+        const productToAdd = products.find(
+            (product) => product.id === productId
+        );
 
-        // Find the closest parent productCard
-        const productCard = event.currentTarget.closest(".productCard");
-
-        if (productCard) {
-            // Get the product title from the corresponding ID
-            const productTitleElement = productCard.querySelector(
-                "[id^='product_title_cart']"
-            );
-
-            if (productTitleElement) {
-                console.log(
-                    "Clicked Product Add Cart:",
-                    productTitleElement.innerText
+        if (productToAdd) {
+            setCart((prevCart) => {
+                const existingProduct = prevCart.find(
+                    (item) => item.id === productId
                 );
 
-                productTitleElement.style.pointerEvents = "none"; // Prevent further clicks
-                productTitleElement.style.opacity = "0.5"; // Make it look disabled
-                productTitleElement.innerText = "Added"; // Change text
-            } else {
-                console.log("Product title not found.");
-            }
-        } else {
-            console.log("Product card not found.");
+                if (existingProduct) {
+                    alert("Product Already In Cart");
+                    return prevCart.map((item) =>
+                        item.id === productId
+                            ? { ...item, count: item.count + 1 }
+                            : item
+                    );
+                } else {
+                    return [...prevCart, { ...productToAdd, count: 1 }];
+                }
+            });
+
+            // Mark the product as added
+            setAddedProducts((prev) => [...prev, productId]);
         }
     }
 
-
+    // Format product title for display
     function formatTitle(title, maxLength = 20) {
         if (typeof title !== "string") return "Title Unavailable";
-
         let words = title.split(" ");
         let formattedTitle = "";
         let line = "";
-
         words.forEach((word) => {
             if ((line + word).length <= maxLength) {
-                line += (line ? " " : "") + word; // Add space between words
+                line += (line ? " " : "") + word;
             } else {
-                formattedTitle += line + "<br>"; // Add the line with a break
-                line = word; // Start a new line with the current word
+                formattedTitle += line + "<br>";
+                line = word;
             }
         });
-
-        formattedTitle += line; // Add the remaining words
-
+        formattedTitle += line;
         return formattedTitle;
     }
 
+    // Render product listings
     function renderProducts() {
         return filteredProducts.map((product, index) => {
-            // rename products to product
             return (
                 <div
                     key={index}
                     className="productCard justify-items-center justify-around flex flex-col"
-                    style={{
-                        height: "650px",
-                    }}
+                    style={{ height: "650px" }}
                 >
                     <img
                         src={product.image}
@@ -163,41 +151,53 @@ export default function productslist() {
                     <p className="text-xl font-bold">${product.price}</p>
                     <div className="flex font-semibold">
                         <span
-                            id={`product_title_cart`}
-                            data-id={product.id} // Store the actual product ID
-                            onClick={(event) => returnOnClickCartAdds(event)}
+                            id={`product_title_cart_${product.id}`}
+                            data-id={product.id}
+                            onClick={() => handleAddToCart(product.id)}
+                            style={{
+                                pointerEvents: addedProducts.includes(
+                                    product.id
+                                )
+                                    ? "none"
+                                    : "auto",
+                                opacity: addedProducts.includes(product.id)
+                                    ? 0.5
+                                    : 1,
+                            }}
                         >
-                            Add to Cart
+                            {addedProducts.includes(product.id)
+                                ? "Added"
+                                : "Add to Cart"}
                         </span>
-                        <span
-                            className="BuyNowContorl"
-                            data-id={product.id} // Store the actual product ID
-                        >
+                        <span className="BuyNowContorl" data-id={product.id}>
                             Buy Now
                         </span>
                     </div>
                 </div>
             );
         });
-    };
+    }
 
     return (
-        <div className="Main_Shop_Page flex gap-[5%] ">
-            <nav>{renderCategories()}</nav>
+        <div className="Main_Shop_Page flex gap-[5%] justify-center">
+            {!cartPage && !IsCartOpen && <nav>{renderCategories()}</nav>}
 
-            {/* Hide product listings when the cart is open */}
-            {!isCartOpen && (
+            {!cartPage && !IsCartOpen && (
                 <div className="productlistings gap-[1%]">
                     {renderProducts()}
                 </div>
             )}
-            <OnClickCartAdds
-                products={filteredProducts}
-                setIsCartOpen={setIsCartOpen}
-                IsCartOpen={isCartOpen}
-            />
+
+            {(cartPage || isCartOpen) && (
+                <OnClickCartAdds
+                    products={filteredProducts}
+                    setIsCartOpen={setIsCartOpen}
+                    IsCartOpen={isCartOpen}
+                    cart={cart} // Pass cart state
+                    setCart={setCart} // Pass setCart function
+                    cartPage={cartPage} // Pass cartPage prop
+                />
+            )}
         </div>
     );
 }
-
-

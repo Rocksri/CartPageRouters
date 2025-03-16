@@ -1,69 +1,16 @@
-import { useEffect, useState } from "react";
-
+import { useEffect } from "react";
 
 export default function OnClickCartAdds({
-    products,
     setIsCartOpen,
     IsCartOpen,
+    cart, // Receive cart state from parent
+    setCart, // Receive setCart function from parent
+    cartPage, // Receive cartPage prop from parent
 }) {
-    const [cart, setCart] = useState(() => {
-        // Load cart from localStorage on first render
-        const savedCart = localStorage.getItem("cart");
-        return savedCart ? JSON.parse(savedCart) : [];
-    });
-
     useEffect(() => {
         // Save cart to localStorage whenever it changes
         localStorage.setItem("cart", JSON.stringify(cart));
     }, [cart]);
-
-    function handleClickProductAdd(event) {
-        const target = event.target;
-
-        if (target.id && target.id.startsWith("product_title_cart")) {
-            const productId = parseInt(target.getAttribute("data-id"),10); // Get the real product ID
-
-            const productToAdd = products.find(
-                (product) => product.id === productId
-            );
-
-            if (productToAdd) {
-                setCart((prevCart) => {
-                    const existingProduct = prevCart.find(
-                        (item) => item.id === productId
-                    );
-
-                    if (existingProduct) {
-                        alert("Product Already In Cart");
-                        // If product exists, increase the count
-                        return prevCart.map((item) =>
-                            item.id === productId
-                                ? { ...item, count: item.count + 1 }
-                                : item
-                        );
-                    } else {
-                        // Otherwise, add new product with count = 1
-                        return [...prevCart, { ...productToAdd, count: 1 }];
-                    }
-                });
-            }
-            document
-                .getElementById("product_add")
-                .classList.add("product_added");
-        }
-    }
-
-    function OnClickCartOpen(event) {
-        const target = event.target;
-        if (target.closest(".MainCart")) {
-            if (cart.length === 0) {
-                alert("Please Add Products To Cart");
-            } else {
-                console.log("Opening cart...");
-                setIsCartOpen((prev) => !prev);
-            }
-        }
-    }
 
     function CountControl(event, type) {
         const productId = parseInt(
@@ -76,7 +23,7 @@ export default function OnClickCartAdds({
             );
 
             if (productInCart) {
-                const price = productInCart.price; // Access the price
+                const price = productInCart.price;
                 if (type === "Subract_Count") {
                     if (productInCart.count > 1) {
                         const newCount = productInCart.count - 1;
@@ -87,7 +34,7 @@ export default function OnClickCartAdds({
                                       count: newCount,
                                       total_price: parseFloat(
                                           (newCount * price).toFixed(2)
-                                      ), // Calculate and format
+                                      ),
                                   }
                                 : item
                         );
@@ -104,29 +51,13 @@ export default function OnClickCartAdds({
                                   count: newCount,
                                   total_price: parseFloat(
                                       (newCount * price).toFixed(2)
-                                  ), // Calculate and format
+                                  ),
                               }
                             : item
                     );
                 }
-            } else {
-                // Product not in cart, add it with count 1
-                // Assuming you have price available when adding a new product
-                const productToAdd = products.find(
-                    (product) => product.id === productId
-                );
-                const price = productToAdd.price; // Access price
-                return [
-                    ...prevCart,
-                    {
-                        id: productId,
-                        count: 1,
-                        price: price,
-                        total_price: parseFloat(price.toFixed(2)),
-                    }, // Include price and initial total
-                ];
             }
-            return prevCart; // Return previous cart if no changes
+            return prevCart;
         });
     }
 
@@ -134,39 +65,14 @@ export default function OnClickCartAdds({
         setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
     }
 
-    useEffect(() => {
-        document.addEventListener("click", handleClickProductAdd);
-        document.addEventListener("click", OnClickCartOpen);
-
-        return () => {
-            document.removeEventListener("click", handleClickProductAdd);
-            document.removeEventListener("click", OnClickCartOpen);
-        };
-    }, [products, cart]); // Add cart as dependency.
-
-    const productCount = document.querySelector(".product_added");
-    if (productCount) {
-        console.log("Cart updated:", cart);
-        if (cart.length <= 0) {
-            productCount.innerHTML = "";
-            document
-                .getElementById("product_add")
-                .classList.remove("product_added");
-        } else {
-            productCount.innerHTML = cart.length;
-        }
-    }
-
-    return IsCartOpen ? (
-        cart.length > 0 ? ( // Check if cart is not empty
+    return IsCartOpen || cartPage ? (
+        cart.length > 0 ? (
             <div className="cart-container gap-[1%]">
                 {cart.map((product, index) => (
                     <div
                         key={index}
                         className="productCard justify-items-center justify-around flex flex-col"
-                        style={{
-                            height: "650px",
-                        }}
+                        style={{ height: "650px" }}
                     >
                         <img
                             src={product.image}
@@ -183,11 +89,9 @@ export default function OnClickCartAdds({
 
                         <p className="text-2xl font-bold">
                             ${product.price} <br /> Total: $
-                            {
-                                typeof product.total_price === "number"
-                                    ? product.total_price.toFixed(2) // Display total_price if it's a number
-                                    : product.price.toFixed(2) // Otherwise, display the single price
-                            }
+                            {typeof product.total_price === "number"
+                                ? product.total_price.toFixed(2)
+                                : product.price.toFixed(2)}
                         </p>
 
                         <div className="CountControl flex" data-id={product.id}>
@@ -209,7 +113,7 @@ export default function OnClickCartAdds({
                                 +
                             </button>
                         </div>
-                        <div className="flex font-semibold text-xl ">
+                        <div className="flex font-semibold text-xl">
                             <span
                                 className="RemoveContorl"
                                 onClick={() => removeFromCart(product.id)}
@@ -218,7 +122,7 @@ export default function OnClickCartAdds({
                             </span>
                             <span
                                 className="BuyNowContorl"
-                                data-id={product.id} // Store the actual product ID
+                                data-id={product.id}
                             >
                                 Buy Now
                             </span>
@@ -227,16 +131,15 @@ export default function OnClickCartAdds({
                 ))}
             </div>
         ) : (
-            <div className="text-2xl font-semibold self-center">
+            <div className="text-2xl font-semibold justify-items-center">
                 Cart is Empty
                 <h2
                     className="text-blue-600 cursor-pointer hover:underline"
-                    onClick={() => (window.location.href = "index.html")} // Change to correct file name
+                    onClick={() => (window.location.hash = "#products")}
                 >
                     Go Back To Shopping
                 </h2>
             </div>
         )
     ) : null;
-
 }

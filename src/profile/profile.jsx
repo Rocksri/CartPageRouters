@@ -1,23 +1,23 @@
-
-
-export default function pageHeader() {
+export default function PageHeader({ cart, handleCartClick }) {
     return (
         <header className="flex">
             <h1 className="LogoPath"></h1>
             <nav>
                 <ul className="flex text-2xl">
                     <li>
-                        <a href="#">Home</a>
+                        <a href="#home">Home</a>
                     </li>
                     <li>
-                        <a href="#">Menu</a>
+                        <a href="#products">Products</a>
                     </li>
-                    <li className="acricle MainCart justify-items-center">
-                        <a href="#">Cart</a>
-                        <span
-                            id="product_add"
-                            className="flex font-semibold"
-                        ></span>
+                    <li
+                        className="acricle MainCart justify-items-center"
+                        onClick={handleCartClick}
+                    >
+                        <a href="#cart">Cart</a>
+                        <span id="product_add" className="flex font-semibold">
+                            {cart.length > 0 ? cart.length : ""}
+                        </span>
                     </li>
                 </ul>
             </nav>

@@ -5,9 +5,14 @@ export default function BuyNowClick() {
     const [cart, setCart] = useState([]);
 
     useEffect(() => {
-        // Load cart and products from localStorage on mount
-        const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-        setCart(storedCart);
+        // Load cart from localStorage on mount
+        try {
+            const storedCart = JSON.parse(localStorage.getItem("cart") || "[]");
+            setCart(storedCart);
+        } catch (error) {
+            console.error("Error parsing cart from localStorage:", error);
+            setCart([]); // Fallback to empty array
+        }
     }, []);
 
     function handleClickBuyNow(event) {
@@ -15,24 +20,34 @@ export default function BuyNowClick() {
         if (target.classList.contains("BuyNowContorl")) {
             const productId = parseInt(target.getAttribute("data-id"), 10);
 
-            const storedProducts =
-                JSON.parse(localStorage.getItem("products")) || [];
-            const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+            try {
+                const storedProducts = JSON.parse(
+                    localStorage.getItem("products") || "[]"
+                );
+                const storedCart = JSON.parse(
+                    localStorage.getItem("cart") || "[]"
+                );
 
-            const productToBuy = storedProducts.find(
-                (product) => Number(product.id) === productId
-            );
-            const productFromCart = storedCart.find(
-                (product) => product.id === productId
-            );
+                const productToBuy = storedProducts.find(
+                    (product) => Number(product.id) === productId
+                );
+                const productFromCart = storedCart.find(
+                    (product) => product.id === productId
+                );
 
-            if (productToBuy) {
-                setBuyNowProduct({
-                    ...productToBuy,
-                    count: productFromCart ? productFromCart.count : 1,
-                });
-            } else {
-                console.warn("Product not found in storedProducts:", productId);
+                if (productToBuy) {
+                    setBuyNowProduct({
+                        ...productToBuy,
+                        count: productFromCart ? productFromCart.count : 1,
+                    });
+                } else {
+                    console.warn(
+                        "Product not found in storedProducts:",
+                        productId
+                    );
+                }
+            } catch (error) {
+                console.error("Error parsing localStorage data:", error);
             }
         }
     }
@@ -67,25 +82,31 @@ export default function BuyNowClick() {
         // Show alert
         alert("Product Ordered!");
 
-        // Get current cart from localStorage
-        const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+        try {
+            // Get current cart from localStorage
+            const storedCart = JSON.parse(localStorage.getItem("cart") || "[]");
 
-        // Remove the purchased product from the cart
-        const updatedCart = storedCart.filter(
-            (product) => product.id !== buyNowProduct.id
-        );
+            // Remove the purchased product from the cart
+            const updatedCart = storedCart.filter(
+                (product) => product.id !== buyNowProduct.id
+            );
 
-        // Save updated cart back to localStorage
-        localStorage.setItem("cart", JSON.stringify(updatedCart));
+            // Save updated cart back to localStorage
+            localStorage.setItem("cart", JSON.stringify(updatedCart));
 
-        // Get current orders from localStorage
-        const storedOrders = JSON.parse(localStorage.getItem("orders")) || [];
+            // Get current orders from localStorage
+            const storedOrders = JSON.parse(
+                localStorage.getItem("orders") || "[]"
+            );
 
-        // Add the ordered product to the orders list
-        storedOrders.push(buyNowProduct);
+            // Add the ordered product to the orders list
+            storedOrders.push(buyNowProduct);
 
-        // Save orders back to localStorage
-        localStorage.setItem("orders", JSON.stringify(storedOrders));
+            // Save orders back to localStorage
+            localStorage.setItem("orders", JSON.stringify(storedOrders));
+        } catch (error) {
+            console.error("Error updating localStorage:", error);
+        }
 
         // Clear buyNowProduct state (close modal)
         setBuyNowProduct(null);
@@ -97,7 +118,11 @@ export default function BuyNowClick() {
 
     // Update localStorage whenever cart changes
     useEffect(() => {
-        localStorage.setItem("cart", JSON.stringify(cart));
+        try {
+            localStorage.setItem("cart", JSON.stringify(cart));
+        } catch (error) {
+            console.error("Error saving cart to localStorage:", error);
+        }
     }, [cart]);
 
     useEffect(() => {
