@@ -67,12 +67,12 @@ export default function OnClickCartAdds({
 
     return IsCartOpen || cartPage ? (
         cart.length > 0 ? (
-            <div className="cart-container gap-[1%]">
+            <div className="cart-container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
                 {cart.map((product, index) => (
                     <div
                         key={index}
-                        className="productCard justify-items-center justify-around flex flex-col"
-                        style={{ height: "650px" }}
+                        className="productCard items-center justify-between flex flex-col"
+                        style={{ height: "700px" }}
                     >
                         <img
                             src={product.image}
@@ -80,7 +80,7 @@ export default function OnClickCartAdds({
                             style={{ height: "40%" }}
                         />
                         <p
-                            className={`font-medium text-xl product_title_${
+                            className={`font-semibold product_title_${
                                 index + 1
                             }`}
                         >
@@ -113,7 +113,7 @@ export default function OnClickCartAdds({
                                 +
                             </button>
                         </div>
-                        <div className="flex font-semibold text-xl">
+                        <div className="h-[20%] w-[60%] flex flex-col justify-around font-semibold text-xl">
                             <span
                                 className="RemoveContorl"
                                 onClick={() => removeFromCart(product.id)}

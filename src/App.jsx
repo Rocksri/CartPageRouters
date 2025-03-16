@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
-import "./Style.css";
+// import "./Style.css";
+import "./App.css";
 import ProductList from "./products/products";
 import BuyNowClick from "./products/Buynow";
 import PageHeader from "./profile/profile";
+import HomePgae from "./profile/homepage"
 
 export default function App() {
     const [currentPage, setCurrentPage] = useState("#home");
@@ -49,10 +51,7 @@ export default function App() {
         <div className="App">
             <PageHeader cart={cart} handleCartClick={handleCartClick} />
             {currentPage === "#home" && (
-                <div className="home-page flex flex-col items-center">
-                    <h1>Welcome to Our Store</h1>
-                    <a href="#products">Browse Products</a>
-                </div>
+                < HomePgae/>
             )}
             {currentPage === "#products" && (
                 <ProductList

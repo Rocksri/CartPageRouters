@@ -133,7 +133,7 @@ export default function ProductList({
             return (
                 <div
                     key={index}
-                    className="productCard justify-items-center justify-around flex flex-col"
+                    className="productCard items-center justify-between flex flex-col"
                     style={{ height: "650px" }}
                 >
                     <img
@@ -149,7 +149,7 @@ export default function ProductList({
                         id={`product_title_${index + 1}`}
                     />
                     <p className="text-xl font-bold">${product.price}</p>
-                    <div className="flex font-semibold">
+                    <div className="h-[20%] w-[60%] flex flex-col justify-around font-semibold">
                         <span
                             id={`product_title_cart_${product.id}`}
                             data-id={product.id}
@@ -183,7 +183,7 @@ export default function ProductList({
             {!cartPage && !IsCartOpen && <nav>{renderCategories()}</nav>}
 
             {!cartPage && !IsCartOpen && (
-                <div className="productlistings gap-[1%]">
+                <div className="productlistings grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
                     {renderProducts()}
                 </div>
             )}
