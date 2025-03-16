@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import "./Style.css";
+// import "./Style.css";
+import "./App.css";
 import ProductList from "./products/products";
 import BuyNowClick from "./products/Buynow";
 import PageHeader from "./profile/profile";

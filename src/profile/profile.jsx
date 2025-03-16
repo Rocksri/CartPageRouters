@@ -10,12 +10,12 @@ export default function PageHeader({ cart, handleCartClick }) {
                     <li>
                         <a href="#products">Products</a>
                     </li>
-                    <li
-                        className="acricle MainCart justify-items-center"
-                        onClick={handleCartClick}
-                    >
-                        <a href="#cart">Cart</a>
-                        <span id="product_add" className="flex font-semibold">
+                    <li className="flex MainCart w-[25%] justify-around">
+                        <a href="#cart" onClick={handleCartClick}>
+                            Cart
+                        </a>
+                        <span id="product_add" className="flex font-semibold"
+                        >
                             {cart.length > 0 ? cart.length : ""}
                         </span>
                     </li>

@@ -1,167 +1,206 @@
-/* General Reset */
-* {
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    background-color: #f8f5f0;
+    color: #333;
 }
 
-body {
-    font-family: 'Inter', sans-serif;
-    background-color: #f9f6f0;
-    /* Creamy background */
-    color: #4a4a4a;
-    /* Soft dark gray for text */
-    line-height: 1.6;
+#root {
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
 }
 
-/* Header Styles */
 header {
-    background-color: #fff8f0;
-    /* Light creamy background */
-    padding: 1rem 2rem;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    /* Subtle shadow */
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
+    padding: 20px 0;
+    border-bottom: 3px solid #e0d8c9;
 }
 
-header h1.LogoPath,
-header h1.ProfileLogo {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #d4a373;
-    /* Warm brown for logos */
+header h1 {
+    font-size: 2em;
+    color: #5c4033;
 }
 
-nav ul {
+header .LogoPath,
+header .ProfileLogo {
+    clip-path: polygon(40% 0, 75% 30%, 35% 30%, 35% 44%, 75% 44%, 75% 75%, 35% 75%, 100% 100%, 20% 85%, 20% 66%, 60% 65%, 60% 55%, 20% 55%, 20% 20%, 55% 20%, 30% 0);
+    background-color: #5c4033;
+    padding: 25px;
+}
+
+header .ProfileLogo {
+    clip-path: polygon(0 65%, 21% 15%, 70% 0, 100% 50%, 63% 20%, 100% 75%, 47% 31%, 100% 100%, 32% 45%, 75% 100%, 20% 59%, 50% 100%);
+}
+
+header nav {
+    width: 100%;
+    max-width: 300px;
+}
+
+header nav ul {
     list-style: none;
     display: flex;
-    gap: 1.5rem;
+    justify-content: space-around;
+    padding: 0;
+    margin: 0;
 }
 
-nav ul li a {
+header nav ul a {
     text-decoration: none;
-    color: #4a4a4a;
+    color: #5c4033;
     font-weight: 500;
     transition: color 0.3s ease;
 }
 
-nav ul li a:hover {
-    color: #d4a373;
-    /* Warm brown on hover */
+header nav ul a:hover {
+    color: #8b735c;
 }
 
-/* Main Content Styles */
 .pageCatalog {
-    padding: 2rem;
-    background-color: #fff8f0;
-    /* Light creamy background */
-    margin-bottom: 2rem;
+    padding: 20px 0;
 }
 
 .pageCatalog h2 {
-    font-size: 2rem;
-    color: #4a4a4a;
+    font-size: 2.5em;
+    color: #5c4033;
+    margin-bottom: 10px;
 }
 
 .Main_Shop_Page {
-    display: flex;
-    gap: 5%;
-    padding: 0 2rem;
+    margin-top: 20px;
 }
 
-/* Sidebar Navigation Styles */
 .Main_Shop_Page nav ul {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-.Main_Shop_Page nav ul li a {
+.Main_Shop_Page nav a {
     text-decoration: none;
-    color: #4a4a4a;
-    font-weight: 500;
+    color: #5c4033;
+    display: block;
+    padding: 10px 0;
     transition: color 0.3s ease;
 }
 
-.Main_Shop_Page nav ul li a:hover {
-    color: #d4a373;
-    /* Warm brown on hover */
+.Main_Shop_Page nav a:hover {
+    color: #8b735c;
 }
 
-/* Product Card Styles */
-.productlistings {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1%;
-}
 
 .productCard {
-    background-color: #ffffff;
-    /* White background for cards */
-    border-radius: 12px;
-    /* Rounded corners */
-    padding: 1.5rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    /* Soft shadow */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    width: calc(25% - 1%);
-    /* Adjust based on your layout */
-}
-
-.productCard:hover {
-    transform: translateY(-5px);
-    /* Slight lift on hover */
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-    /* Deeper shadow on hover */
+    border: 3px solid #e0d8c9;
+    padding: 20px;
+    text-align: center;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 290px;
 }
 
 .productCard img {
-    border-radius: 8px;
-    /* Rounded corners for images */
-    object-fit: cover;
-}
-
-.productCard p {
-    margin: 0.5rem 0;
+    max-width: 100%;
+    height: auto;
 }
 
 .productCard .font-semibold {
-    color: #d4a373;
-    /* Warm brown for price */
+    display: flex;
+    justify-content: space-around;
 }
 
-.productCard .flex.font-semibold span {
+.productCard .CountControl {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.productCard .CountControl .Subract_Count,
+.productCard .CountControl .Add_Count {
+    background-color: #f0e6d2;
+    color: #5c4033;
+    border: none;
+    padding: 5px 10px;
+    font-size: 1rem;
+    border-radius: 5px;
     cursor: pointer;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    background-color: #d4a373;
-    /* Warm brown for buttons */
-    color: white;
     transition: background-color 0.3s ease;
 }
 
-.productCard .flex.font-semibold span:hover {
-    background-color: #b3875f;
-    /* Darker brown on hover */
+.productCard .CountControl .Subract_Count:hover,
+.productCard .CountControl .Add_Count:hover {
+    background-color: #e8dbc3;
+}
+
+.productCard span {
+    cursor: pointer;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background-color: #f0e6d2;
+    color: #5c4033;
+    transition: background-color 0.3s ease;
+}
+
+.productCard span:hover {
+    background-color: #e8dbc3;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .Main_Shop_Page {
+    header {
         flex-direction: column;
+        align-items: center;
+        text-align: center;
     }
 
+    header nav {
+        margin-top: 20px;
+    }
+
+
+
     .productCard {
-        width: calc(50% - 1%);
-        /* Adjust for smaller screens */
+        padding: 15px;
+    }
+
+    .productCard .CountControl {
+        flex-direction: column;
+        gap: 5px;
     }
 }
 
 @media (max-width: 480px) {
+    #root {
+        padding: 10px;
+    }
+
+    header h1 {
+        font-size: 1.5em;
+    }
+
+    header .LogoPath,
+    header .ProfileLogo {
+        padding: 15px;
+    }
+
+
     .productCard {
-        width: 100%;
-        /* Full width on mobile */
+        padding: 10px;
+    }
+
+    .productCard .CountControl .Subract_Count,
+    .productCard .CountControl .Add_Count {
+        padding: 3px 6px;
+        font-size: 0.9rem;
+    }
+
+    .productCard span {
+        padding: 5px 8px;
     }
 }
