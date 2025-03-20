@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { motion } from "framer-motion";
 
 export default function OnClickCartAdds({
     setIsCartOpen,
@@ -131,14 +132,18 @@ export default function OnClickCartAdds({
                 ))}
             </div>
         ) : (
-            <div className="text-2xl font-semibold justify-items-center">
-                Cart is Empty
-                <h2
-                    className="text-blue-600 cursor-pointer hover:underline"
+            <div>
+                <h2 className="text-2xl font-semibold text-center">
+                    Cart is Empty
+                </h2>
+                <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="mt-8 px-6 py-3 bg-yellow-500 text-black font-semibold rounded-full shadow-lg hover:bg-yellow-400 transition"
                     onClick={() => (window.location.hash = "#products")}
                 >
                     Go Back To Shopping
-                </h2>
+                </motion.button>
             </div>
         )
     ) : null;

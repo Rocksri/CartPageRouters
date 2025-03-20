@@ -15,7 +15,6 @@ html {
 }
 
 header {
-    display: flex;
     justify-content: space-around;
     align-items: center;
     padding: 20px 0;
@@ -113,6 +112,20 @@ header nav ul a:hover {
     justify-content: center;
     gap: 10px;
 }
+
+
+.productCard .font-semibold {
+    display: flex;
+    justify-content: space-around;
+}
+
+.productCard .CountControl {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
 
 .productCard .CountControl .Subract_Count,
 .productCard .CountControl .Add_Count {

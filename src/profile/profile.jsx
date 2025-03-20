@@ -21,7 +21,6 @@ export default function PageHeader({ cart, handleCartClick }) {
                     </li>
                 </ul>
             </nav>
-            <h1>Profile</h1>
         </header>
     );
 }
