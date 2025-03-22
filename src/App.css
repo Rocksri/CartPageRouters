@@ -37,8 +37,7 @@ header .ProfileLogo {
 }
 
 header nav {
-    width: 100%;
-    max-width: 300px;
+    width: 30%;
 }
 
 header nav ul {

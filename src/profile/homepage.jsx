@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 export default function WelcomePage() {
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-gray-900 to-gray-800 text-white">
+        <div className="flex flex-col items-center justify-center h-[85svh] bg-gradient-to-r from-gray-900 to-gray-800 text-white">
             {/* Logo & Heading */}
             <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -15,7 +16,6 @@ export default function WelcomePage() {
                     Your one-stop shop for everything trendy!
                 </p>
             </motion.div>
-
             {/* Animated Shopping Image */}
             {/* <motion.img
                 src="https://source.unsplash.com/600x400/?shopping"
@@ -25,16 +25,16 @@ export default function WelcomePage() {
                 transition={{ duration: 1, delay: 0.5 }}
                 className="mt-6 rounded-lg shadow-lg"
             /> */}
-
             {/* Call-to-Action Button */}
-            <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                className="mt-8 px-6 py-3 bg-yellow-500 text-black font-semibold rounded-full shadow-lg hover:bg-yellow-400 transition"
-                onClick={() => (window.location.hash = "#products")}
-            >
-                Shop Now
-            </motion.button>
+            <Link to="/products">
+                <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="mt-8 px-6 py-3 bg-yellow-500 text-black font-semibold rounded-full shadow-lg hover:bg-yellow-400 transition"
+                >
+                    Shop Now
+                </motion.button>
+            </Link>{" "}
         </div>
     );
 }

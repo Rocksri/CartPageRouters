@@ -1,3 +1,7 @@
+
+
+import { Link } from "react-router-dom";
+
 export default function PageHeader({ cart, handleCartClick }) {
     return (
         <header className="flex">
@@ -5,19 +9,24 @@ export default function PageHeader({ cart, handleCartClick }) {
             <nav>
                 <ul className="flex text-2xl">
                     <li>
-                        <a href="#home">Home</a>
+                        <Link to="/">Home</Link> {/* Link to Home */}
                     </li>
                     <li>
-                        <a href="#products">Products</a>
+                        <Link to="/products">Products</Link>
+                        {/* Link to Products */}
                     </li>
-                    <li className="flex MainCart w-[25%] justify-around">
-                        <a href="#cart" onClick={handleCartClick}>
+                    <li className="flex MainCart w-[20%] justify-around">
+                        <Link to="/cart">
                             Cart
-                        </a>
-                        <span id="product_add" className="flex font-semibold"
-                        >
+                        </Link>{" "}
+                        {/* Link to Cart */}
+                        <span id="product_add" className="flex font-semibold">
                             {cart.length > 0 ? cart.length : ""}
                         </span>
+                    </li>
+                    <li>
+                        {/* <Link to="/myorders">My Orders</Link>{" "} */}
+                        {/* Link to My Orders */}
                     </li>
                 </ul>
             </nav>

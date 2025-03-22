@@ -1,76 +1,80 @@
 import { useState, useEffect } from "react";
-// import "./Style.css";
-import "./App.css";
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    useLocation,
+} from "react-router-dom";
 import ProductList from "./products/products";
 import BuyNowClick from "./products/Buynow";
 import PageHeader from "./profile/profile";
-import HomePgae from "./profile/homepage"
+import HomePage from "./profile/homepage"; // Corrected typo in import
+// import "./Style.css";
+import "./App.css";
 
-export default function App() {
-    const [currentPage, setCurrentPage] = useState("#home");
+
+function AppContent() {
     const [cart, setCart] = useState(() => {
         const savedCart = localStorage.getItem("cart");
         return savedCart ? JSON.parse(savedCart) : [];
     });
-    const [isCartOpen, setIsCartOpen] = useState(false);
 
-    const handleCartClick = () => {
-        if (cart.length === 0) {
-            alert("Please Add Products To Cart");
-            window.location.hash = "#products"; // Redirect to Products page
-        } else {
-            setIsCartOpen((prev) => !prev); // Toggle cart open/close
-        }
-    };
-
-    // Handle hash change
+    // Save cart to localStorage whenever it changes
     useEffect(() => {
-        const handleHashChange = () => {
-            const newHash = window.location.hash || "#home";
-            setCurrentPage(newHash);
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }, [cart]);
 
-            // Reset isCartOpen when navigating away from the cart page
-            if (newHash !== "#cart") {
-                setIsCartOpen(false);
-            }
-        };
+    const [cartPage, setCartPage] = useState(false);
+    const location = useLocation(); // Get the current location
 
-        // Add event listener for hash change
-        window.addEventListener("hashchange", handleHashChange);
-
-        // Trigger initial hash check
-        handleHashChange();
-
-        // Cleanup event listener
-        return () => {
-            window.removeEventListener("hashchange", handleHashChange);
-        };
-    }, []);
+    // Update cartPage based on the current route
+    useEffect(() => {
+        if (location.pathname === "/cart") {
+            setCartPage(true);
+        } else if (location.pathname === "/products") {
+            setCartPage(false);
+        }
+    }, [location.pathname]); // Re-run effect when the path changes
 
     return (
-        <div className="App">
-            <PageHeader cart={cart} handleCartClick={handleCartClick} />
-            {currentPage === "#home" && (
-                < HomePgae/>
-            )}
-            {currentPage === "#products" && (
-                <ProductList
-                    cart={cart}
-                    setCart={setCart}
-                    setIsCartOpen={setIsCartOpen}
-                    IsCartOpen={isCartOpen}
-                />
-            )}
-            {currentPage === "#cart" && (
-                <ProductList
-                    cartPage={true}
-                    cart={cart}
-                    setCart={setCart}
-                    setIsCartOpen={setIsCartOpen}
-                    IsCartOpen={isCartOpen}
-                />
-            )}
-            <BuyNowClick />
-        </div>
+            <div className="App">
+                <PageHeader cart={cart} />
+                <Routes>
+                    {/* Home Page */}
+                    <Route path="/" element={<HomePage />} />
+                    {/* Products Page */}
+                    <Route
+                        path="/products"
+                        element={
+                            <ProductList
+                                cartPage={cartPage}
+                                cart={cart}
+                                setCart={setCart}
+                            />
+                        }
+                    />
+                    {/* Cart Page */}
+                    <Route
+                        path="/cart"
+                        element={
+                            <ProductList
+                                cartPage={cartPage}
+                                cart={cart}
+                                setCart={setCart}
+                            />
+                        }
+                    />
+                </Routes>
+                <BuyNowClick />
+            </div>
+    );
+}
+
+
+export default function App() {
+    return (
+        <Router>
+            <AppContent />
+        </Router>
     );
 }
