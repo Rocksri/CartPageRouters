@@ -36,13 +36,7 @@ export default function ProductList({ cartPage, cart, setCart }) {
             const uniqueCategories = ["All", ...new Set(allCategories)];
             setFilter(uniqueCategories);
         }
-    }, [products]);
-
-    // Sync addedProducts with cart whenever cart changes
-    useEffect(() => {
-        const productIdsInCart = cart.map((item) => item.id);
-        setAddedProducts(productIdsInCart);
-    }, [cart]);
+    }, [products, cart]);
 
     // Reset addedProducts when navigating away from the cart page
     useEffect(() => {
@@ -68,7 +62,7 @@ export default function ProductList({ cartPage, cart, setCart }) {
     // Render category filters
     function renderCategories() {
         return (
-            <ul className="text-2xl text-start flex-col">
+            <ul className="text-2xl text-start flex flex-col h-[10%]">
                 {filter.map((category, index) => (
                     <li key={index}>
                         <a
@@ -102,7 +96,13 @@ export default function ProductList({ cartPage, cart, setCart }) {
                     alert("Product Already In Cart");
                     return prevCart.map((item) =>
                         item.id === productId
-                            ? { ...item, count: item.count + 1 }
+                            ? {
+                                  ...item,
+                                  count: item.count + 1,
+                                  total_price: parseFloat(
+                                      ((item.count + 1) * item.price).toFixed(2)
+                                  ),
+                              }
                             : item
                     );
                 } else {
@@ -114,9 +114,12 @@ export default function ProductList({ cartPage, cart, setCart }) {
             setAddedProducts((prev) => {
                 if (!prev.includes(productId)) {
                     return [...prev, productId]; // Add the productId to addedProducts
-            }
+                }
                 return prev; // If already added, return the previous state
             });
+        } else {
+            // Handle the case where product is not found
+            console.error("Product not found!");
         }
     }
 
@@ -144,7 +147,7 @@ export default function ProductList({ cartPage, cart, setCart }) {
             return (
                 <div
                     key={index}
-                    className="productCard items-center justify-between flex flex-col"
+                    className="productCard items-center justify-between flex flex-col text-center"
                     style={{ height: "650px" }}
                 >
                     <img
@@ -160,7 +163,7 @@ export default function ProductList({ cartPage, cart, setCart }) {
                         id={`product_title_${index + 1}`}
                     />
                     <p className="text-xl font-bold">${product.price}</p>
-                    <div className="h-[20%] w-[60%] flex flex-col justify-around font-semibold">
+                    <div className="h-[20%] flex flex-col justify-around font-semibold">
                         <span
                             id={`product_title_cart_${product.id}`}
                             data-id={product.id}
@@ -175,12 +178,14 @@ export default function ProductList({ cartPage, cart, setCart }) {
                                     ? 0.5
                                     : 1,
                             }}
+                            role="button"
                         >
                             {addedProducts.includes(product.id)
                                 ? "Added"
                                 : "Add to Cart"}
                         </span>
-                        <span className="BuyNowContorl" data-id={product.id}>
+                        <span className="BuyNowContorl" data-id={product.id}
+                        role="button">
                             Buy Now
                         </span>
                     </div>
@@ -190,20 +195,125 @@ export default function ProductList({ cartPage, cart, setCart }) {
     }
 
     return (
-        <div className="Main_Shop_Page flex gap-[5%] justify-center">
+        <div className="Main_Shop_Page flex gap-[2.5%] justify-center p-[2%] ">
             {!cartPage && <nav>{renderCategories()}</nav>}
-
             {!cartPage && (
                 <div className="productlistings grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
                     {renderProducts()}
                 </div>
             )}
-
             {cartPage && (
                 <OnClickCartAdds
                     cart={cart} // Pass cart state
                     setCart={setCart} // Pass setCart function
                 />
+            )}
+
+            {cart.length > 0 && (
+                <div
+                    className="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6"
+                    style={{
+                        width: location.pathname === "/cart" ? "40%" : "20%",
+                        height: "0%",
+                        position: "sticky",
+                        top: "20%",
+                    }}
+                >
+                    <p className="text-xl font-semibold text-gray-900 dark:text-white">
+                        Order summary
+                    </p>
+
+                    <div className="space-y-4">
+                        <div className="space-y-2">
+                            <dl className="flex items-center justify-between gap-4">
+                                <dt className="text-base font-normal text-gray-500 dark:text-gray-400">
+                                    Original price
+                                </dt>
+                                <dd className="text-base font-medium text-gray-900 dark:text-white">
+                                    $
+                                    {cart
+                                        .reduce(
+                                            (acc, obj) =>
+                                                acc +
+                                                (isNaN(obj.total_price)
+                                                    ? obj.price
+                                                    : obj.total_price),
+                                            0
+                                        )
+                                        .toFixed(2)}
+                                </dd>
+                            </dl>
+
+                            <dl className="flex items-center justify-between gap-4">
+                                <dt className="text-base font-normal text-gray-500 dark:text-gray-400">
+                                    Savings
+                                </dt>
+                                <dd className="text-base font-medium text-green-600">
+                                    -$
+                                    {(
+                                        cart.reduce(
+                                            (acc, obj) =>
+                                                acc +
+                                                (isNaN(obj.total_price)
+                                                    ? obj.price
+                                                    : obj.total_price),
+                                            0
+                                        ) * 0.1
+                                    ).toFixed(2)}
+                                </dd>
+                            </dl>
+
+                            <dl className="flex items-center justify-between gap-4">
+                                <dt className="text-base font-normal text-gray-500 dark:text-gray-400">
+                                    Tax
+                                </dt>
+                                <dd className="text-base font-medium text-gray-900 dark:text-white">
+                                    $
+                                    {(
+                                        cart.reduce(
+                                            (acc, obj) =>
+                                                acc +
+                                                (isNaN(obj.total_price)
+                                                    ? obj.price
+                                                    : obj.total_price),
+                                            0
+                                        ) * 0.05
+                                    ).toFixed(2)}
+                                </dd>
+                            </dl>
+                        </div>
+
+                        <dl className="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
+                            <dt className="text-base font-bold text-gray-900 dark:text-white">
+                                Total
+                            </dt>
+                            <dd className="text-base font-bold text-gray-900 dark:text-white">
+                                $
+                                {parseFloat(
+                                    (
+                                        cart.reduce(
+                                            (acc, obj) =>
+                                                acc +
+                                                (isNaN(obj.total_price)
+                                                    ? obj.price
+                                                    : obj.total_price),
+                                            0
+                                        ) +
+                                        cart.reduce(
+                                            (acc, obj) =>
+                                                acc +
+                                                (isNaN(obj.total_price)
+                                                    ? obj.price
+                                                    : obj.total_price),
+                                            0
+                                        ) *
+                                            0.05
+                                    ).toFixed(2)
+                                )}
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
             )}
         </div>
     );

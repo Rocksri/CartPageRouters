@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export default function PageHeader({ cart, handleCartClick }) {
     return (
-        <header className="flex">
+        <header className="flex header">
             <h1 className="LogoPath"></h1>
             <nav>
                 <ul className="flex text-2xl">

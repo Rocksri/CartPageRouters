@@ -5,9 +5,11 @@ body {
     background-color: #f8f5f0;
     color: #333;
 }
+
 html {
     scroll-behavior: smooth;
 }
+
 #root {
     width: 100%;
     margin: 0 auto;
@@ -26,71 +28,75 @@ header h1 {
     color: #5c4033;
 }
 
-header .LogoPath {
-    clip-path: polygon(40% 0, 75% 30%, 35% 30%, 35% 44%, 75% 44%, 75% 75%, 35% 75%, 100% 100%, 20% 85%, 20% 66%, 60% 65%, 60% 55%, 20% 55%, 20% 20%, 55% 20%, 30% 0);
-    background-color: #5c4033;
-    padding: 25px;
-}
+header {
+    .LogoPath {
+        clip-path: polygon(40% 0, 75% 30%, 35% 30%, 35% 44%, 75% 44%, 75% 75%, 35% 75%, 100% 100%, 20% 85%, 20% 66%, 60% 65%, 60% 55%, 20% 55%, 20% 20%, 55% 20%, 30% 0);
+        background-color: #5c4033;
+        padding: 25px;
+    }
 
-header .ProfileLogo {
-    clip-path: polygon(0 65%, 21% 15%, 70% 0, 100% 50%, 63% 20%, 100% 75%, 47% 31%, 100% 100%, 32% 45%, 75% 100%, 20% 59%, 50% 100%);
-}
+    .ProfileLogo {
+        clip-path: polygon(0 65%, 21% 15%, 70% 0, 100% 50%, 63% 20%, 100% 75%, 47% 31%, 100% 100%, 32% 45%, 75% 100%, 20% 59%, 50% 100%);
+    }
 
-header nav {
-    width: 30%;
-}
 
-header nav ul {
-    list-style: none;
-    display: flex;
-    justify-content: space-around;
-    padding: 0;
-    margin: 0;
-}
+    nav {
+        width: 30%;
+    }
 
-header nav ul a {
-    text-decoration: none;
-    color: #5c4033;
-    font-weight: 500;
-    transition: color 0.3s ease;
-}
+    nav ul {
+        list-style: none;
+        display: flex;
+        justify-content: space-around;
+        padding: 0;
+        margin: 0;
+    }
 
-header nav ul a:hover {
-    color: #8b735c;
+    nav ul a {
+        text-decoration: none;
+        color: #5c4033;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+
+    nav ul a:hover {
+        color: #8b735c;
+    }
 }
 
 .pageCatalog {
     padding: 20px 0;
+
+    .pageCatalog h2 {
+        font-size: 2.5em;
+        color: #5c4033;
+        margin-bottom: 10px;
+    }
 }
 
-.pageCatalog h2 {
-    font-size: 2.5em;
-    color: #5c4033;
-    margin-bottom: 10px;
-}
 
 .Main_Shop_Page {
     margin-top: 20px;
-}
 
-.Main_Shop_Page nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
 
-.Main_Shop_Page nav a {
-    text-decoration: none;
-    color: #5c4033;
-    display: block;
-    padding: 10px 0;
-    transition: color 0.3s ease;
-}
+    nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
 
-.Main_Shop_Page nav a:hover {
-    color: #8b735c;
-}
+    nav a {
+        text-decoration: none;
+        color: #5c4033;
+        display: block;
+        padding: 10px 0;
+        transition: color 0.3s ease;
+    }
 
+    nav a:hover {
+        color: #8b735c;
+    }
+}
 
 .productCard {
     border: 3px solid #e0d8c9;
@@ -101,59 +107,52 @@ header nav ul a:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
     width: 100%;
     max-width: 290px;
-}
 
 
 
-.productCard .CountControl {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
+
+    .font-semibold {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .CountControl {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
 
 
-.productCard .font-semibold {
-    display: flex;
-    justify-content: space-around;
-}
+    .CountControl .Subract_Count,
+    .CountControl .Add_Count {
+        background-color: #f0e6d2;
+        color: #5c4033;
+        border: none;
+        padding: 5px 10px;
+        font-size: 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
 
-.productCard .CountControl {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
+    .CountControl .Subract_Count:hover,
+    .CountControl .Add_Count:hover {
+        background-color: #e8dbc3;
+    }
 
+    span {
+        cursor: pointer;
+        padding: 8px 10px;
+        border-radius: 10px;
+        background-color: #f0e6d2;
+        color: #5c4033;
+        transition: background-color 0.3s ease;
+    }
 
-.productCard .CountControl .Subract_Count,
-.productCard .CountControl .Add_Count {
-    background-color: #f0e6d2;
-    color: #5c4033;
-    border: none;
-    padding: 5px 10px;
-    font-size: 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.productCard .CountControl .Subract_Count:hover,
-.productCard .CountControl .Add_Count:hover {
-    background-color: #e8dbc3;
-}
-
-.productCard span {
-    cursor: pointer;
-    padding: 8px 10px;
-    border-radius: 10px;
-    background-color: #f0e6d2;
-    color: #5c4033;
-    transition: background-color 0.3s ease;
-}
-
-.productCard span:hover {
-    background-color: #e8dbc3;
+    span:hover {
+        background-color: #e8dbc3;
+    }
 }
 
 /* Responsive Design */

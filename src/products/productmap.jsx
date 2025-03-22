@@ -73,7 +73,7 @@ export default function OnClickCartAdds({
             {cart.map((product, index) => (
                 <div
                     key={index}
-                    className="productCard items-center justify-between flex flex-col"
+                    className="productCard items-center justify-between flex flex-col text-center"
                     style={{ height: "700px" }}
                 >
                     <img
@@ -101,7 +101,9 @@ export default function OnClickCartAdds({
                         >
                             -
                         </button>
-                        <span className="text-2xl">{product.count}</span>
+                        <span className="text-2xl font-bold min-w-[2.5rem]">
+                            {product.count}
+                        </span>
                         <button
                             className="Add_Count"
                             onClick={(event) =>
@@ -111,14 +113,16 @@ export default function OnClickCartAdds({
                             +
                         </button>
                     </div>
-                    <div className="h-[20%] w-[60%] flex flex-col justify-around font-semibold text-xl">
+                    <div className="h-[20%] flex flex-col justify-around font-semibold text-xl">
                         <span
                             className="RemoveContorl"
                             onClick={() => removeFromCart(product.id)}
+                            role="button"
                         >
                             Remove All
                         </span>
-                        <span className="BuyNowContorl" data-id={product.id}>
+                        <span className="BuyNowContorl" data-id={product.id}
+                        role="button">
                             Buy Now
                         </span>
                     </div>

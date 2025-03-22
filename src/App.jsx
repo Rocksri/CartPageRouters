@@ -9,8 +9,8 @@ import ProductList from "./products/products";
 import BuyNowClick from "./products/Buynow";
 import PageHeader from "./profile/profile";
 import HomePage from "./profile/homepage"; // Corrected typo in import
-// import "./Style.css";
-import "./App.css";
+import "./Style.css";
+// import "./App.css";
 
 
 function AppContent() {
