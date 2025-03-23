@@ -142,70 +142,73 @@ export default function BuyNowClick() {
     if (!buyNowProduct) return null;
 
     return (
+        <div
+            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+            onClick={closeModal}
+        >
             <div
-                className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
-                onClick={closeModal}
+                className="bg-white p-6 rounded-lg shadow-lg w-[400px] h-[700px] flex flex-col justify-around"
+                onClick={(e) => e.stopPropagation()}
             >
-                <div
-                    className="bg-white p-6 rounded-lg shadow-lg w-[400px] h-[700px] flex flex-col justify-around"
-                    onClick={(e) => e.stopPropagation()}
-                >
-                    <h2 className="text-2xl font-bold mb-4">Buy Now</h2>
+                <h2 className="text-2xl font-bold mb-4">Buy Now</h2>
 
-                    {buyNowProduct?.image && (
-                        <img
-                            src={buyNowProduct.image}
-                            alt={buyNowProduct.title || "Product Image"}
-                            className="w-full h-[40%] object-contain rounded-md"
-                        />
-                    )}
+                {buyNowProduct?.image && (
+                    <img
+                        src={buyNowProduct.image}
+                        alt={buyNowProduct.title || "Product Image"}
+                        className="w-full h-[40%] object-contain rounded-md"
+                    />
+                )}
 
-                    <h3 className="text-xl font-bold">
-                        {buyNowProduct?.title || "No Title"}
-                    </h3>
+                <h3 className="text-xl font-bold">
+                    {buyNowProduct?.title || "No Title"}
+                </h3>
 
-                    <p className="text-xl font-medium text-gray-700">
-                        {buyNowProduct?.price !== undefined
-                            ? `$${buyNowProduct.price.toFixed(2)}`
-                            : "Price not available"}
-                    </p>
+                <p className="text-xl font-semibold text-gray-700">
+                    {buyNowProduct?.price !== undefined
+                        ? `$${buyNowProduct.price.toFixed(2)}`
+                        : "Price not available"}
+                </p>
 
-                    <div className="flex items-center justify-around font-semibold text-2xl">
-                        <button
-                            className="p-2 bg-gray-300 rounded"
-                            onClick={() => updateQuantity(-1)}
-                        >
-                            <FaMinus />
-                        </button>
-                        <span>{buyNowProduct?.count || 1}</span>
-                        <button
-                            className="p-2 bg-gray-300 rounded"
-                            onClick={() => updateQuantity(1)}
-                        >
-                            <FaPlus />
-                        </button>
-                    </div>
-
-                    <p className="text-2xl font-semibold">
-                        Total: $
-                        {buyNowProduct?.price !== undefined
-                        ? (buyNowProduct.count * buyNowProduct.price).toFixed(2)
-                            : "0.00"}
-                    </p>
-
+                <div className="flex items-center justify-around font-semibold text-2xl">
                     <button
-                        className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700"
-                        onClick={handleCheckout}
+                        className="p-2 bg-gray-300 rounded"
+                        onClick={() => updateQuantity(-1)}
                     >
-                        Proceed to Checkout
+                        <FaMinus />
                     </button>
+                    <span>{buyNowProduct?.count || 1}</span>
                     <button
-                        className="text-gray-500 hover:text-gray-700"
-                        onClick={closeModal}
+                        className="p-2 bg-gray-300 rounded"
+                        onClick={() => updateQuantity(1)}
                     >
-                        ✖
+                        <FaPlus />
                     </button>
                 </div>
+
+                <p className="text-2xl font-semibold">
+                    Total : $
+                    {buyNowProduct?.price !== undefined
+                        ? (
+                              buyNowProduct.count * buyNowProduct.price +
+                              buyNowProduct.price * 0.05
+                          ).toFixed(2)
+                        : "0.00"} ( +Tax 5%)
+                </p>
+
+                <button
+                    className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700"
+                    onClick={handleCheckout}
+                >
+                    Proceed to Checkout
+                </button>
+                <button
+                    className="text-gray-500 hover:text-gray-700"
+                    onClick={closeModal}
+                >
+                    ✖
+                </button>
             </div>
+        </div>
     );
 }
