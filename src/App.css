@@ -1,210 +1,223 @@
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f8f5f0;
-    color: #333;
+:root {
+    --primary: #5c4033;
+    --secondary: #8b735c;
+    --accent: #c7a17a;
+    --background: #f8f5f0;
+    --surface: #fffcf9;
+    --error: #d32f2f;
+    --success: #2e7d32;
+
+    --text-primary: #2d2424;
+    --text-secondary: #5e534b;
+
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 16px;
+
+    --space-xs: 0.5rem;
+    --space-sm: 1rem;
+    --space-md: 1.5rem;
+    --space-lg: 2rem;
+
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.16);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.2);
+
+    --transition-fast: 0.2s ease;
+    --transition-medium: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --interactive-bg: #f0e6d2;
+    --interactive-hover-bg: #e8dbc3;
+    --interactive-active-bg: #e0d0b0;
+    --interactive-color: #5c4033;
+    --interactive-border: 1.5px solid transparent;
+    --transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Base Styles */
 html {
     scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
 }
 
-#root {
+body {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    background: linear-gradient(180deg, var(--background) 0%, #fff8f0 100%);
+    color: var(--text-primary);
+    min-height: 100vh;
+}
+
+#root,
+.App {
     width: 100%;
     margin: 0 auto;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
+/* Header */
 header {
+    position: sticky;
+    top: 0;
+    background: var(--surface);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    box-shadow: var(--shadow-sm);
+    padding: var(--space-sm) 0;
+    display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 20px 0;
-    border-bottom: 3px solid #e0d8c9;
 }
 
-header h1 {
-    font-size: 2em;
-    color: #5c4033;
+header .LogoPath {
+    clip-path: polygon(40% 0, 75% 30%, 35% 30%, 35% 44%, 75% 44%, 75% 75%, 35% 75%, 100% 100%, 20% 85%, 20% 66%, 60% 65%, 60% 55%, 20% 55%, 20% 20%, 55% 20%, 30% 0);
+    background-color: #5c4033;
+    padding: 25px;
 }
 
-header {
-    .LogoPath {
-        clip-path: polygon(40% 0, 75% 30%, 35% 30%, 35% 44%, 75% 44%, 75% 75%, 35% 75%, 100% 100%, 20% 85%, 20% 66%, 60% 65%, 60% 55%, 20% 55%, 20% 20%, 55% 20%, 30% 0);
-        background-color: #5c4033;
-        padding: 25px;
-    }
-
-    .ProfileLogo {
-        clip-path: polygon(0 65%, 21% 15%, 70% 0, 100% 50%, 63% 20%, 100% 75%, 47% 31%, 100% 100%, 32% 45%, 75% 100%, 20% 59%, 50% 100%);
-    }
-
-
-    nav {
-        width: 30%;
-    }
-
-    nav ul {
-        list-style: none;
-        display: flex;
-        justify-content: space-around;
-        padding: 0;
-        margin: 0;
-    }
-
-    nav ul a {
-        text-decoration: none;
-        color: #5c4033;
-        font-weight: 500;
-        transition: color 0.3s ease;
-    }
-
-    nav ul a:hover {
-        color: #8b735c;
-    }
+header .ProfileLogo {
+    clip-path: polygon(0 65%, 21% 15%, 70% 0, 100% 50%, 63% 20%, 100% 75%, 47% 31%, 100% 100%, 32% 45%, 75% 100%, 20% 59%, 50% 100%);
 }
 
-.pageCatalog {
-    padding: 20px 0;
-
-    .pageCatalog h2 {
-        font-size: 2.5em;
-        color: #5c4033;
-        margin-bottom: 10px;
-    }
-}
-
-
-.Main_Shop_Page {
-    margin-top: 20px;
-
-
-    nav ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    nav a {
-        text-decoration: none;
-        color: #5c4033;
-        display: block;
-        padding: 10px 0;
-        transition: color 0.3s ease;
-    }
-
-    nav a:hover {
-        color: #8b735c;
-    }
-}
-
-.productCard {
-    border: 3px solid #e0d8c9;
-    padding: 20px;
-    text-align: center;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+header nav,
+.Main_Shop_Page nav {
     width: 100%;
-    max-width: 290px;
-
-
-
-
-    .font-semibold {
-        display: flex;
-        justify-content: space-around;
-    }
-
-    .CountControl {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-    }
-
-
-    .CountControl .Subract_Count,
-    .CountControl .Add_Count {
-        background-color: #f0e6d2;
-        color: #5c4033;
-        border: none;
-        padding: 5px 10px;
-        font-size: 1rem;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    .CountControl .Subract_Count:hover,
-    .CountControl .Add_Count:hover {
-        background-color: #e8dbc3;
-    }
-
-    span {
-        cursor: pointer;
-        padding: 8px 10px;
-        border-radius: 10px;
-        background-color: #f0e6d2;
-        color: #5c4033;
-        transition: background-color 0.3s ease;
-    }
-
-    span:hover {
-        background-color: #e8dbc3;
-    }
+    /* Full width on mobile */
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    header {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-
-    header nav {
-        margin-top: 20px;
-    }
-
-
-
-    .productCard {
-        padding: 15px;
-    }
-
-    .productCard .CountControl {
-        flex-direction: column;
-        gap: 5px;
-    }
+header nav ul,
+.Main_Shop_Page nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    /* Allow wrapping on smaller screens */
+    padding: 0;
+    margin: 0;
 }
 
-@media (max-width: 480px) {
-    #root {
-        padding: 10px;
-    }
-
-    header h1 {
-        font-size: 1.5em;
-    }
-
-    header .LogoPath,
-    header .ProfileLogo {
-        padding: 15px;
-    }
-
-
-    .productCard {
-        padding: 10px;
-    }
-
-    .productCard .CountControl .Subract_Count,
-    .productCard .CountControl .Add_Count {
-        padding: 3px 6px;
-        font-size: 0.9rem;
-    }
-
-    .productCard span {
-        padding: 5px 8px;
-    }
+header nav li,
+.Main_Shop_Page nav li {
+    padding: 10px;
+    flex: 0 1 auto;
+    /* Distribute items evenly */
 }
+
+header nav a,
+.Main_Shop_Page nav a {
+    position: relative;
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+header nav a::after,
+.Main_Shop_Page nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2.5px !important;
+    background: var(--accent);
+    transition: width var(--transition-fast);
+}
+
+header nav a:hover::after,
+.Main_Shop_Page nav a:hover::after {
+    width: 100%;
+}
+
+header nav a.active,
+.Main_Shop_Page nav a.active {
+    color: var(--accent);
+}
+
+/* Product Card */
+.productCard {
+    --card-padding: var(--space-md);
+    position: relative;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: var(--card-padding);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-medium), box-shadow var(--transition-medium);
+    overflow: hidden;
+    margin-bottom: var(--space-md);
+    /* Add spacing between cards */
+}
+
+.productCard:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.productCard:hover .product-image {
+    transform: scale(1.05);
+}
+
+.productCard img {
+    height: 200px;
+    object-fit: contain;
+    border-radius: var(--radius-md);
+    transition: transform var(--transition-medium);
+}
+
+.productCard .CountControl {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+}
+
+.productCard .CountControl button {
+    border: none;
+    padding: 0.5em !important;
+    background: var(--accent);
+    color: var(--surface);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.productCard .CountControl button:hover {
+    background: var(--secondary);
+    transform: scale(1.1);
+}
+
+.productCard .CountControl button:active {
+    transform: scale(0.95);
+}
+
+span[role="button"] {
+    cursor: pointer;
+    padding: 0.5em 1em;
+    border-radius: 0.625em;
+    background-color: var(--interactive-bg);
+    color: var(--interactive-color);
+    border: var(--interactive-border);
+    transition: all 0.2s var(--transition-timing);
+    min-height: 2.5rem;
+    font-weight: 500;
+    user-select: none;
+    gap: 0.5em;
+    position: relative;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+}
+
+span[role="button"]:hover {
+    background-color: var(--interactive-hover-bg);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+span[role="button"]:active {
+    background-color: var(--interactive-active-bg);
+    transform: translateY(0);
+    transition-duration: 0.1s;
+}
+
+span[role="button"]:focus-visible {
+    outline: 2
