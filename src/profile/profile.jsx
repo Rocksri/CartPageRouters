@@ -24,10 +24,6 @@ export default function PageHeader({ cart, handleCartClick }) {
                             {cart.length > 0 ? cart.length : ""}
                         </span>
                     </li>
-                    <li>
-                        {/* <Link to="/myorders">My Orders</Link>{" "} */}
-                        {/* Link to My Orders */}
-                    </li>
                 </ul>
             </nav>
         </header>
