@@ -62,7 +62,7 @@ export default function ProductList({ cartPage, cart, setCart }) {
     // Render category filters
     function renderCategories() {
         return (
-            <ul className="text-2xl text-start flex flex-col h-[10%]">
+            <ul className="text-2xl text-start flex flex-col">
                 {filter.map((category, index) => (
                     <li key={index}>
                         <a
@@ -148,7 +148,7 @@ export default function ProductList({ cartPage, cart, setCart }) {
                 <div
                     key={index}
                     className="productCard items-center justify-between flex flex-col text-center"
-                    style={{ height: "650px" }}
+                    style={{ height: "600px" }}
                 >
                     <img
                         src={product.image}

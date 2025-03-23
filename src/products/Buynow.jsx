@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
+import { FaPlus, FaMinus } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
 
 export default function BuyNowClick() {
     const [buyNowProduct, setBuyNowProduct] = useState(null);
     const [cart, setCart] = useState([]);
+  const location = useLocation();
 
     useEffect(() => {
         // Load cart from localStorage on mount
@@ -15,6 +18,24 @@ export default function BuyNowClick() {
         }
     }, []);
 
+  // Close modal when navigating to specific paths
+  useEffect(() => {
+    const blockedPaths = ["/cart", "/products", "/"];
+    if (blockedPaths.includes(location.pathname)) {
+      setBuyNowProduct(null);
+      console.log("Modal closed on path change");
+    }
+  }, [location]);
+
+  // Update localStorage whenever cart changes
+  useEffect(() => {
+    try {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    } catch (error) {
+      console.error("Error saving cart to localStorage:", error);
+    }
+  }, [cart]);
+
     function handleClickBuyNow(event) {
         const target = event.target;
         if (target.classList.contains("BuyNowContorl")) {
@@ -24,9 +45,7 @@ export default function BuyNowClick() {
                 const storedProducts = JSON.parse(
                     localStorage.getItem("products") || "[]"
                 );
-                const storedCart = JSON.parse(
-                    localStorage.getItem("cart") || "[]"
-                );
+                const storedCart = JSON.parse(localStorage.getItem("cart") || "[]");
 
                 const productToBuy = storedProducts.find(
                     (product) => Number(product.id) === productId
@@ -41,10 +60,7 @@ export default function BuyNowClick() {
                         count: productFromCart ? productFromCart.count : 1,
                     });
                 } else {
-                    console.warn(
-                        "Product not found in storedProducts:",
-                        productId
-                    );
+                console.warn("Product not found in storedProducts:", productId);
                 }
             } catch (error) {
                 console.error("Error parsing localStorage data:", error);
@@ -55,7 +71,6 @@ export default function BuyNowClick() {
     function updateQuantity(change) {
         setBuyNowProduct((prev) => {
             if (!prev) return null;
-
             const newCount = Math.max(1, prev.count + change);
             const updatedProduct = { ...prev, count: newCount };
 
@@ -116,15 +131,6 @@ export default function BuyNowClick() {
         setBuyNowProduct(null);
     }
 
-    // Update localStorage whenever cart changes
-    useEffect(() => {
-        try {
-            localStorage.setItem("cart", JSON.stringify(cart));
-        } catch (error) {
-            console.error("Error saving cart to localStorage:", error);
-        }
-    }, [cart]);
-
     useEffect(() => {
         document.addEventListener("click", handleClickBuyNow);
         return () => {
@@ -132,10 +138,10 @@ export default function BuyNowClick() {
         };
     }, []);
 
+
     if (!buyNowProduct) return null;
 
     return (
-        buyNowProduct && (
             <div
                 className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
                 onClick={closeModal}
@@ -166,26 +172,24 @@ export default function BuyNowClick() {
 
                     <div className="flex items-center justify-around font-semibold text-2xl">
                         <button
-                            className="px-3 py-1 bg-gray-300 rounded"
+                            className="p-2 bg-gray-300 rounded"
                             onClick={() => updateQuantity(-1)}
                         >
-                            -
+                            <FaMinus />
                         </button>
                         <span>{buyNowProduct?.count || 1}</span>
                         <button
-                            className="px-3 py-1 bg-gray-300 rounded"
+                            className="p-2 bg-gray-300 rounded"
                             onClick={() => updateQuantity(1)}
                         >
-                            +
+                            <FaPlus />
                         </button>
                     </div>
 
                     <p className="text-2xl font-semibold">
                         Total: $
                         {buyNowProduct?.price !== undefined
-                            ? (
-                                  buyNowProduct.count * buyNowProduct.price
-                              ).toFixed(2)
+                        ? (buyNowProduct.count * buyNowProduct.price).toFixed(2)
                             : "0.00"}
                     </p>
 
@@ -203,6 +207,5 @@ export default function BuyNowClick() {
                     </button>
                 </div>
             </div>
-        )
     );
 }

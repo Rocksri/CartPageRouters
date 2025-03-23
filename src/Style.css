@@ -83,6 +83,9 @@ header {
 .header, .Main_Shop_Page {
     nav {
         width: 20%;
+        li {
+            padding: 10px;
+        }
         ul {
             list-style: none;
             justify-content: space-around;
@@ -98,7 +101,7 @@ header {
                     bottom: 0;
                     left: 0;
                     width: 0;
-                    height: 2px;
+                    height: 2.5px !important;
                     background: var(--accent);
                     transition: width var(--transition-fast);
                 }
@@ -109,7 +112,6 @@ header {
 
                 &.active {
                     color: var(--accent);
-                    font-weight: 800;
                 }
             }
         }
@@ -152,6 +154,7 @@ header {
 
         button {
             border: none;
+            padding: 0.5em !important;
             background: var(--accent);
             color: var(--surface);
             border-radius: var(--radius-sm);

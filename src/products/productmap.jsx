@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { FaPlus, FaMinus } from "react-icons/fa";
 
 export default function OnClickCartAdds({
     cart, // Receive cart state from parent
@@ -13,7 +14,7 @@ export default function OnClickCartAdds({
 
     function CountControl(event, type) {
         const productId = parseInt(
-            event.target.parentNode.getAttribute("data-id")
+            event.target.closest(".CountControl").getAttribute("data-id")
         );
 
         setCart((prevCart) => {
@@ -99,7 +100,7 @@ export default function OnClickCartAdds({
                                 CountControl(event, "Subract_Count")
                             }
                         >
-                            -
+                            <FaMinus />
                         </button>
                         <span className="text-2xl font-bold min-w-[2.5rem]">
                             {product.count}
@@ -110,7 +111,7 @@ export default function OnClickCartAdds({
                                 CountControl(event, "Add_Count")
                             }
                         >
-                            +
+                            <FaPlus />
                         </button>
                     </div>
                     <div className="h-[20%] flex flex-col justify-around font-semibold text-xl">
@@ -121,8 +122,11 @@ export default function OnClickCartAdds({
                         >
                             Remove All
                         </span>
-                        <span className="BuyNowContorl" data-id={product.id}
-                        role="button">
+                        <span
+                            className="BuyNowContorl"
+                            data-id={product.id}
+                            role="button"
+                        >
                             Buy Now
                         </span>
                     </div>
