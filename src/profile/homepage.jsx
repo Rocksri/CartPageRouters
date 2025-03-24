@@ -9,7 +9,7 @@ export default function WelcomePage() {
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 1 }}
-                className="text-center"
+                className="text-center Welcome"
             >
                 <h1 className="text-5xl font-extrabold">Welcome to ShopEase</h1>
                 <p className="text-lg mt-2 text-gray-300">

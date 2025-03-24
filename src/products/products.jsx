@@ -63,6 +63,7 @@ export default function ProductList({ cartPage, cart, setCart }) {
     function renderCategories() {
         return (
             <ul className="text-2xl text-start flex flex-col">
+                <p className="p-[10px]">Filter's</p>
                 {filter.map((category, index) => (
                     <li key={index}>
                         <a
@@ -147,7 +148,7 @@ export default function ProductList({ cartPage, cart, setCart }) {
             return (
                 <div
                     key={index}
-                    className="productCard items-center justify-between flex flex-col text-center"
+                    className="productCard items-center justify-evenly flex flex-col text-center"
                     style={{ height: "600px" }}
                 >
                     <img
@@ -155,13 +156,16 @@ export default function ProductList({ cartPage, cart, setCart }) {
                         alt={product.title}
                         className="h-[50%]"
                     />
-                    <p
+                    {/* <p
                         dangerouslySetInnerHTML={{
                             __html: formatTitle(product.title),
                         }}
                         className={`font-medium product_title_${index + 1}`}
                         id={`product_title_${index + 1}`}
-                    />
+                    /> */}
+                    <p className={`font-medium product_title_${index + 1} p-[10px]`} id={`product_title_${index + 1}`}>
+                        {product.title}
+                    </p>
                     <p className="text-xl font-bold">${product.price}</p>
                     <div className="h-[20%] flex flex-col justify-around font-semibold">
                         <span
@@ -184,8 +188,11 @@ export default function ProductList({ cartPage, cart, setCart }) {
                                 ? "Added"
                                 : "Add to Cart"}
                         </span>
-                        <span className="BuyNowContorl" data-id={product.id}
-                        role="button">
+                        <span
+                            className="BuyNowContorl"
+                            data-id={product.id}
+                            role="button"
+                        >
                             Buy Now
                         </span>
                     </div>
@@ -193,12 +200,129 @@ export default function ProductList({ cartPage, cart, setCart }) {
             );
         });
     }
+    const handleBuyNowClick = () => {
+        alert("Ordered the products");
+    };
 
     return (
         <div className="Main_Shop_Page flex gap-[2.5%] justify-center p-[2%] ">
-            {!cartPage && <nav>{renderCategories()}</nav>}
+            <div className="Main_Shop_Filter flex flex-col gap-[3%]">
+                {!cartPage && <nav>{renderCategories()}</nav>}
+                {cart.length > 0 && (
+                    <div
+                        id="OrderSummary"
+                        className="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6"
+                        style={{
+                            position: "sticky",
+                            top: "20%",
+                        }}
+                    >
+                        <p className="text-xl font-semibold text-gray-900 dark:text-white">
+                            Order summary
+                        </p>
+
+                        <div className="space-y-4 text-center">
+                            <div className="space-y-2">
+                                <dl className="flex flex-col border-b-4">
+                                    <dt className="text-base font-normal text-gray-500 dark:text-gray-400">
+                                        Original price
+                                    </dt>
+                                    <dd className="text-base font-medium text-gray-900 dark:text-white">
+                                        $
+                                        {cart
+                                            .reduce(
+                                                (acc, obj) =>
+                                                    acc +
+                                                    (isNaN(obj.total_price)
+                                                        ? obj.price
+                                                        : obj.total_price),
+                                                0
+                                            )
+                                            .toFixed(2)}
+                                    </dd>
+                                </dl>
+
+                                <dl className="flex flex-col border-b-4">
+                                    <dt className="text-base font-normal text-gray-500 dark:text-gray-400">
+                                        Savings
+                                    </dt>
+                                    <dd className="text-base font-medium text-green-600">
+                                        -$
+                                        {(
+                                            cart.reduce(
+                                                (acc, obj) =>
+                                                    acc +
+                                                    (isNaN(obj.total_price)
+                                                        ? obj.price
+                                                        : obj.total_price),
+                                                0
+                                            ) * 0.1
+                                        ).toFixed(2)}
+                                    </dd>
+                                </dl>
+
+                                <dl className="flex flex-col">
+                                    <dt className="text-base font-normal text-gray-500 dark:text-gray-400">
+                                        Tax
+                                    </dt>
+                                    <dd className="text-base font-medium text-gray-900 dark:text-white">
+                                        $
+                                        {(
+                                            cart.reduce(
+                                                (acc, obj) =>
+                                                    acc +
+                                                    (isNaN(obj.total_price)
+                                                        ? obj.price
+                                                        : obj.total_price),
+                                                0
+                                            ) * 0.05
+                                        ).toFixed(2)}
+                                    </dd>
+                                </dl>
+                            </div>
+
+                            <dl className="flex justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
+                                <dt className="text-base font-bold text-gray-900 dark:text-white">
+                                    Total
+                                </dt>
+                                <dd className="text-base font-bold text-gray-900 dark:text-white">
+                                    $
+                                    {parseFloat(
+                                        (
+                                            cart.reduce(
+                                                (acc, obj) =>
+                                                    acc +
+                                                    (isNaN(obj.total_price)
+                                                        ? obj.price
+                                                        : obj.total_price),
+                                                0
+                                            ) +
+                                            cart.reduce(
+                                                (acc, obj) =>
+                                                    acc +
+                                                    (isNaN(obj.total_price)
+                                                        ? obj.price
+                                                        : obj.total_price),
+                                                0
+                                            ) *
+                                                0.05
+                                        ).toFixed(2)
+                                    )}
+                                </dd>
+                            </dl>
+                            <button
+                                onClick={handleBuyNowClick}
+                                type="button"
+                                class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 "
+                            >
+                                Buy Now
+                            </button>
+                        </div>
+                    </div>
+                )}
+            </div>
             {!cartPage && (
-                <div className="productlistings grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
+                <div className="productlistings grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-5">
                     {renderProducts()}
                 </div>
             )}
@@ -207,113 +331,6 @@ export default function ProductList({ cartPage, cart, setCart }) {
                     cart={cart} // Pass cart state
                     setCart={setCart} // Pass setCart function
                 />
-            )}
-
-            {cart.length > 0 && (
-                <div
-                    className="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6"
-                    style={{
-                        width: location.pathname === "/cart" ? "40%" : "20%",
-                        height: "0%",
-                        position: "sticky",
-                        top: "20%",
-                    }}
-                >
-                    <p className="text-xl font-semibold text-gray-900 dark:text-white">
-                        Order summary
-                    </p>
-
-                    <div className="space-y-4">
-                        <div className="space-y-2">
-                            <dl className="flex items-center justify-between gap-4">
-                                <dt className="text-base font-normal text-gray-500 dark:text-gray-400">
-                                    Original price
-                                </dt>
-                                <dd className="text-base font-medium text-gray-900 dark:text-white">
-                                    $
-                                    {cart
-                                        .reduce(
-                                            (acc, obj) =>
-                                                acc +
-                                                (isNaN(obj.total_price)
-                                                    ? obj.price
-                                                    : obj.total_price),
-                                            0
-                                        )
-                                        .toFixed(2)}
-                                </dd>
-                            </dl>
-
-                            <dl className="flex items-center justify-between gap-4">
-                                <dt className="text-base font-normal text-gray-500 dark:text-gray-400">
-                                    Savings
-                                </dt>
-                                <dd className="text-base font-medium text-green-600">
-                                    -$
-                                    {(
-                                        cart.reduce(
-                                            (acc, obj) =>
-                                                acc +
-                                                (isNaN(obj.total_price)
-                                                    ? obj.price
-                                                    : obj.total_price),
-                                            0
-                                        ) * 0.1
-                                    ).toFixed(2)}
-                                </dd>
-                            </dl>
-
-                            <dl className="flex items-center justify-between gap-4">
-                                <dt className="text-base font-normal text-gray-500 dark:text-gray-400">
-                                    Tax
-                                </dt>
-                                <dd className="text-base font-medium text-gray-900 dark:text-white">
-                                    $
-                                    {(
-                                        cart.reduce(
-                                            (acc, obj) =>
-                                                acc +
-                                                (isNaN(obj.total_price)
-                                                    ? obj.price
-                                                    : obj.total_price),
-                                            0
-                                        ) * 0.05
-                                    ).toFixed(2)}
-                                </dd>
-                            </dl>
-                        </div>
-
-                        <dl className="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
-                            <dt className="text-base font-bold text-gray-900 dark:text-white">
-                                Total
-                            </dt>
-                            <dd className="text-base font-bold text-gray-900 dark:text-white">
-                                $
-                                {parseFloat(
-                                    (
-                                        cart.reduce(
-                                            (acc, obj) =>
-                                                acc +
-                                                (isNaN(obj.total_price)
-                                                    ? obj.price
-                                                    : obj.total_price),
-                                            0
-                                        ) +
-                                        cart.reduce(
-                                            (acc, obj) =>
-                                                acc +
-                                                (isNaN(obj.total_price)
-                                                    ? obj.price
-                                                    : obj.total_price),
-                                            0
-                                        ) *
-                                            0.05
-                                    ).toFixed(2)
-                                )}
-                            </dd>
-                        </dl>
-                    </div>
-                </div>
             )}
         </div>
     );

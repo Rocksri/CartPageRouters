@@ -75,7 +75,7 @@ export default function OnClickCartAdds({
                 <div
                     key={index}
                     className="productCard items-center justify-between flex flex-col text-center"
-                    style={{ height: "700px" }}
+                    style={{ height: "700px"}}
                 >
                     <img
                         src={product.image}
@@ -134,7 +134,7 @@ export default function OnClickCartAdds({
             ))}
         </div>
     ) : (
-        <div>
+        <div className="self-center">
             <h2 className="text-2xl font-semibold text-center">
                 Cart is Empty
             </h2>

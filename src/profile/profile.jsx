@@ -15,7 +15,7 @@ export default function PageHeader({ cart, handleCartClick }) {
                         <Link to="/products">Products</Link>
                         {/* Link to Products */}
                     </li>
-                    <li className="flex MainCart w-[30%] justify-around">
+                    <li className="flex MainCart w-[30%] justify-evenly">
                         <Link to="/cart">
                             Cart
                         </Link>{" "}

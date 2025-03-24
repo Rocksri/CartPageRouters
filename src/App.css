@@ -67,129 +67,136 @@ header {
     z-index: 1000;
     box-shadow: var(--shadow-sm);
     padding: var(--space-sm) 0;
-    display: flex;
     justify-content: space-around;
     align-items: center;
+
+
+    .LogoPath {
+        clip-path: polygon(40% 0, 75% 30%, 35% 30%, 35% 44%, 75% 44%, 75% 75%, 35% 75%, 100% 100%, 20% 85%, 20% 66%, 60% 65%, 60% 55%, 20% 55%, 20% 20%, 55% 20%, 30% 0);
+        background-color: #5c4033;
+        padding: 25px;
+    }
+
+    .ProfileLogo {
+        clip-path: polygon(0 65%, 21% 15%, 70% 0, 100% 50%, 63% 20%, 100% 75%, 47% 31%, 100% 100%, 32% 45%, 75% 100%, 20% 59%, 50% 100%);
+    }
+
+    nav {
+        width: 50%;
+    }
 }
 
-header .LogoPath {
-    clip-path: polygon(40% 0, 75% 30%, 35% 30%, 35% 44%, 75% 44%, 75% 75%, 35% 75%, 100% 100%, 20% 85%, 20% 66%, 60% 65%, 60% 55%, 20% 55%, 20% 20%, 55% 20%, 30% 0);
-    background-color: #5c4033;
-    padding: 25px;
-}
+header,
+.Main_Shop_Filter {
 
-header .ProfileLogo {
-    clip-path: polygon(0 65%, 21% 15%, 70% 0, 100% 50%, 63% 20%, 100% 75%, 47% 31%, 100% 100%, 32% 45%, 75% 100%, 20% 59%, 50% 100%);
-}
+    nav {
 
-header nav,
-.Main_Shop_Page nav {
-    width: 100%;
-    /* Full width on mobile */
-}
+        ul {
+            list-style: none;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            /* Allow wrapping on smaller screens */
+            padding: 0;
+            margin: 0;
+        }
 
-header nav ul,
-.Main_Shop_Page nav ul {
-    list-style: none;
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    /* Allow wrapping on smaller screens */
-    padding: 0;
-    margin: 0;
-}
 
-header nav li,
-.Main_Shop_Page nav li {
-    padding: 10px;
-    flex: 0 1 auto;
-    /* Distribute items evenly */
-}
+        li {
+            padding: 10px;
+            flex: 0 1 auto;
+            /* Distribute items evenly */
+        }
 
-header nav a,
-.Main_Shop_Page nav a {
-    position: relative;
-    text-decoration: none;
-    color: var(--text-primary);
-}
 
-header nav a::after,
-.Main_Shop_Page nav a::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 2.5px !important;
-    background: var(--accent);
-    transition: width var(--transition-fast);
-}
+        a {
+            position: relative;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
 
-header nav a:hover::after,
-.Main_Shop_Page nav a:hover::after {
-    width: 100%;
-}
 
-header nav a.active,
-.Main_Shop_Page nav a.active {
-    color: var(--accent);
+        a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2.5px !important;
+            background: var(--accent);
+            transition: width var(--transition-fast);
+        }
+
+
+        a:hover::after {
+            width: 100%;
+        }
+
+
+        a.active {
+            color: var(--accent);
+        }
+    }
 }
 
 /* Product Card */
 .productCard {
-    --card-padding: var(--space-md);
     position: relative;
     background: var(--surface);
     border-radius: var(--radius-lg);
-    padding: var(--card-padding);
+    padding: var(--space-xs);
     box-shadow: var(--shadow-sm);
     transition: transform var(--transition-medium), box-shadow var(--transition-medium);
     overflow: hidden;
-    margin-bottom: var(--space-md);
-    /* Add spacing between cards */
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+
+        .product-image {
+            transform: scale(1.05);
+        }
+    }
+
+    img {
+        height: 200px;
+        object-fit: contain;
+        border-radius: var(--radius-md);
+        transition: transform var(--transition-medium);
+    }
+
+
+    .CountControl {
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-sm);
+
+        button {
+            border: none;
+            padding: 0.5em !important;
+            background: var(--accent);
+            color: var(--surface);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition:
+                background var(--transition-fast),
+                transform var(--transition-fast);
+
+            &:hover {
+                background: var(--secondary);
+                transform: scale(1.1);
+            }
+
+            &:active {
+                transform: scale(0.95);
+            }
+        }
+    }
 }
 
-.productCard:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
+.cart-container .productCard {
+    height: 700px ;
 }
 
-.productCard:hover .product-image {
-    transform: scale(1.05);
-}
-
-.productCard img {
-    height: 200px;
-    object-fit: contain;
-    border-radius: var(--radius-md);
-    transition: transform var(--transition-medium);
-}
-
-.productCard .CountControl {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-sm);
-}
-
-.productCard .CountControl button {
-    border: none;
-    padding: 0.5em !important;
-    background: var(--accent);
-    color: var(--surface);
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    transition: background var(--transition-fast), transform var(--transition-fast);
-}
-
-.productCard .CountControl button:hover {
-    background: var(--secondary);
-    transform: scale(1.1);
-}
-
-.productCard .CountControl button:active {
-    transform: scale(0.95);
-}
 
 span[role="button"] {
     cursor: pointer;
@@ -205,19 +212,85 @@ span[role="button"] {
     gap: 0.5em;
     position: relative;
     box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+
+    /* Hover animation */
+    &:hover {
+        background-color: var(--interactive-hover-bg);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Active state */
+    &:active {
+        background-color: var(--interactive-active-bg);
+        transform: translateY(0);
+        transition-duration: 0.1s;
+    }
+
+    span[role="button"]:focus-visible {
+        outline: 2
+    }
 }
 
-span[role="button"]:hover {
-    background-color: var(--interactive-hover-bg);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
 
-span[role="button"]:active {
-    background-color: var(--interactive-active-bg);
-    transform: translateY(0);
-    transition-duration: 0.1s;
-}
 
-span[role="button"]:focus-visible {
-    outline: 2
+@media (max-width: 480px) {
+
+    #root,
+    .App {
+        padding: var(--space-xs);
+    }
+
+    header {
+        flex-direction: column;
+
+        nav {
+            width: 100% !important;
+
+            ul {
+                font-size: large !important;
+            }
+        }
+    }
+
+    .Welcome {
+        h1 {
+            font-size: large !important;
+        }
+
+        p {
+            font-size: medium;
+        }
+    }
+
+    .Main_Shop_Page {
+        flex-direction: column;
+
+        .Main_Shop_Filter {
+            margin: 20px;
+
+            nav {
+                width: 100% !important;
+
+                ul {
+                    flex-direction: row !important;
+                    justify-content: flex-start;
+                    gap: 10%;
+                }
+            }
+
+            #OrderSummary {
+                position: relative !important;
+                top: 0% !important;
+                margin: 15px;
+            }
+        }
+    }
+
+    .Buy_Now {
+        width: 80% !important;
+        height: 70% !important;
+        position: relative;
+        top: 8%;
+    }
+}

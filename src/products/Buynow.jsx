@@ -147,10 +147,10 @@ export default function BuyNowClick() {
             onClick={closeModal}
         >
             <div
-                className="bg-white p-6 rounded-lg shadow-lg w-[400px] h-[700px] flex flex-col justify-around"
+                className="Buy_Now bg-white p-6 rounded-lg shadow-lg w-[400px] h-[700px] flex flex-col justify-around"
                 onClick={(e) => e.stopPropagation()}
             >
-                <h2 className="text-2xl font-bold mb-4">Buy Now</h2>
+                <h2 className="text-2xl font-bold">Buy Now</h2>
 
                 {buyNowProduct?.image && (
                     <img
@@ -193,7 +193,8 @@ export default function BuyNowClick() {
                               buyNowProduct.count * buyNowProduct.price +
                               buyNowProduct.price * 0.05
                           ).toFixed(2)
-                        : "0.00"} ( +Tax 5%)
+                        : "0.00"}{" "}
+                    ( +Tax 5%)
                 </p>
 
                 <button
