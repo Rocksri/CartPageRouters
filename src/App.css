@@ -232,6 +232,10 @@ span[role="button"] {
     }
 }
 
+.Buy_Now {
+    position: relative;
+    top: 8%;
+}
 
 
 @media (max-width: 480px) {
@@ -290,7 +294,5 @@ span[role="button"] {
     .Buy_Now {
         width: 80% !important;
         height: 70% !important;
-        position: relative;
-        top: 8%;
     }
 }
